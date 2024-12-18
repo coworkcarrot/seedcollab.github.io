@@ -71,36 +71,52 @@ nav .container .nav-menu .material-symbols-outlined {
 }
 
 .main {
-  color: black;
   text-align: center;
+}
+.main .bn-content {
+  margin-top: 20px;
 }
 .main .bn-menu {
-  margin-top: 3.5rem;
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: center;
 }
-.main .bn-menu .material-symbols-outlined {
+.main .bn-menu .bn-nemu-symbol {
+  margin-right: 3.5rem;
   position: relative;
 }
-.main .bn-menu .material-symbols-outlined .bn-menu-txt {
-  display: none;
-  position: absolute;
-  top: -45px;
-  left: 0;
-  width: 100%; /* 아이콘 크기에 맞게 텍스트 정렬 */
+.main .bn-menu .bn-nemu-symbol a {
+  font-size: 1rem;
+  transition: all 0.2s ease-out;
+  display: block;
   text-align: center;
+}
+.main .bn-menu .bn-nemu-symbol a:hover {
+  font-weight: bolder;
+}
+.main .bn-menu .bn-nemu-symbol a:hover + .bn-menu-txt {
+  display: block;
+}
+.main .bn-menu .bn-nemu-symbol .bn-menu-txt {
+  display: none;
   font-size: 1rem;
   font-weight: bold;
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  position: absolute;
+  top: -30px;
+  right: 1px;
 }
-.main .bn-menu .material-symbols-outlined a {
-  transition: all 0.2s ease-out;
-  position: relative;
+.main .bn-menu .bn-nemu-symbol img {
+  width: 3.75rem;
+  height: 3.75rem;
 }
-.main .bn-menu .material-symbols-outlined a:hover {
-  color: #797979;
-  font-size: 45px;
-}
-.main .bn-menu .material-symbols-outlined a:hover + .bn-menu-txt {
+.main .bn-menu .bn-nemu-symbol:hover:after {
+  content: "";
   display: block;
+  border: 1px solid black;
+  border-radius: 50%;
+}
+.main .bn-menu .bn-nemu-symbol:last-child {
+  margin-right: 0;
 }
 .main button {
   width: 12rem;

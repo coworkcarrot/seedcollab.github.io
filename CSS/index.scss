@@ -86,49 +86,59 @@ nav {
 }
 
 .main {
-  color: black;
   text-align: center;
 
-  .bn-title {
-    
-  }
-
   .bn-content {
-    
+    margin-top: 20px;
   }
 
   .bn-menu {
-    margin-top: 3.5rem;
-    
+    margin-top: 2.5rem;  
+    display: flex;
+    justify-content: center;
 
-    .material-symbols-outlined {
+    .bn-nemu-symbol {
+      margin-right: 3.5rem;
       position: relative;
-
-      .bn-menu-txt{
-        display: none;
-        position: absolute;
-        top: -45px;
-        left: 0;
-        width: 100%; /* 아이콘 크기에 맞게 텍스트 정렬 */
-        text-align: center;
-        font-size: 1rem;
-        font-weight: bold;
-        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-      }
-
+  
       a {
+        font-size: 1rem;
         transition: all 0.2s ease-out;
-        position: relative;
-        
+        display: block;
+        text-align: center;
 
         &:hover {
-          color: #797979;
-          font-size: 45px;
+          font-weight: bolder;
         }
 
         &:hover + .bn-menu-txt {
           display: block;
         }
+      }
+
+      .bn-menu-txt{
+        display: none;
+        font-size: 1rem;
+        font-weight: bold;
+        position: absolute;
+        top: -30px;
+        right: 1px;
+      }
+
+        img {
+          width: 3.75rem;
+          height: 3.75rem;
+        }
+
+        &:hover:after {
+          content: "";
+          display: block;
+          border: 1px solid black;
+          border-radius: 50%;
+        }
+
+      &:last-child {
+        margin-right: 0;
       }
     }
   }
