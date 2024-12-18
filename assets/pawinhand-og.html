@@ -1,0 +1,1373 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "//www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0031)https://pawinhand.kr/index.html -->
+<html xmlns="//www.w3.org/1999/xhtml" xml:lang="ko" lang="ko"><script type="text/javascript" async="" src="./pawinhand-og_files/ch-plugin-web.js" charset="UTF-8"></script><script async="" src="./pawinhand-og_files/cfa.js" crossorigin="anonymous"></script><script async="" src="./pawinhand-og_files/jet.js"></script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script>(function(i, s, o, g, r) {
+    var a = s.createElement(o);
+    var m = s.getElementsByTagName(o)[0];
+    a.async = true;
+    a.src = g;
+    a.onload = function() {
+        if (i[r].init) {
+            i[r].init('https://js-error-tracer-api.cafe24.com', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwYXdpbmhhbmQxLmNhZmUyNC5jb20iLCJhdWQiOiJqcy1lcnJvci10cmFjZXItYXBpLmNhZmUyNC5jb20iLCJtYWxsX2lkIjoicGF3aW5oYW5kMSIsInNob3Bfbm8iOiIxIiwicGF0aF9yb2xlIjoiTUFJTiIsImxhbmd1YWdlX2NvZGUiOiJrb19LUiIsImNvdW50cnlfY29kZSI6IktSIiwiaXNfeXRzIjpmYWxzZSwiaXNfY29udGFpbmVyIjpmYWxzZSwid29ya3NwYWNlIjoicHJvZHVjdGlvbiJ9.3R-UBssEZgOB1MIAYZHCyhdzoMVjZFFimQ2UDl8UE_s', {"errors":{"path":"\/api\/v1\/store","collectWindowErrors":true,"preventDuplicateReports":true,"storageKeyPrefix":"EC_JET.MAIN","samplingEnabled":true,"samplingRate":0.5},"vitals":{"path":"\/api\/v1\/vitals","samplingEnabled":true,"samplingRate":0.3},"resources":{"path":"\/api\/v1\/resources","samplingEnabled":true,"samplingRate":0.5,"durationThreshold":3000}});
+        }
+    };
+    m.parentNode.insertBefore(a, m);
+}(window, document, 'script', '//optimizer.poxo.com/jet/jet.js', 'EC_JET'));</script>
+<script type="text/javascript">window.CAFE24 = window.CAFE24 || {};CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","path":{"origin":"\/index.html","result":"\/index.html","prefix":""},"shop_no":0,"skin_code":"default","support_language_list":{"ar":"ar_EG","ar-EG":"ar_EG","de":"de_DE","de-DE":"de_DE","en":"en_US","en-IN":"en_IN","en-PH":"en_PH","en-US":"en_US","es":"es_ES","es-ES":"es_ES","hi":"hi_IN","hi-IN":"hi_IN","id":"id_ID","id-ID":"id_ID","it":"it_IT","it-IT":"it_IT","ja":"ja_JP","ja-JP":"ja_JP","ko":"ko_KR","ko-KR":"ko_KR","ms":"ms_MY","ms-MY":"ms_MY","pt":"pt_PT","pt-PT":"pt_PT","ru":"ru_RU","ru-RU":"ru_RU","th":"th_TH","th-TH":"th_TH","tr":"tr_TR","tr-TR":"tr_TR","vi":"vi_VN","vi-VN":"vi_VN","zh":"zh_CN","zh-CN":"zh_CN","zh-HK":"zh_HK","zh-MO":"zh_MO","zh-SG":"zh_SG","zh-TW":"zh_TW"}};</script><script type="text/javascript">if (typeof EC_ROUTE === "undefined") {
+    /**
+     * 프론트용 라우트 플러그인
+     * @type {{bInit: boolean, init: EC_ROUTE.init}}
+     * CAFE24.ROUTE 참조
+     */
+    var EC_ROUTE = {
+        EC_DOMAIN_PATH_INFO: 'EC_DOMAIN_PATH_INFO',
+        bInit: false,
+        aFromList: [],
+        aToList: [],
+        aCleanFilter: null,
+        init: function () {
+            if (this.bInit || typeof CAFE24.ROUTE === 'undefined') {
+                return;
+            }
+            this.bInit = true;
+            this.aCleanFilter = [
+                /^shop[1-9][0-9]*$/,
+                /^(m|p)$/,
+                new RegExp('^(' + Object.keys(CAFE24.ROUTE.support_language_list).join('|')  + ')$'),
+                /^skin-(base|skin[1-9][0-9]*|mobile[0-9]*)$/,
+            ];
+        },
+        isNeedRoute: function ()
+        {
+            return CAFE24.ROUTE.is_need_route;
+        },
+        /**
+         *
+         * @param iShopNo
+         * @param bMobile
+         * @param sFrontLanguage
+         * @param sSkinCode
+         * @returns {*|string}
+         */
+        getUrlDomain: function (iShopNo, bMobile, sFrontLanguage, sSkinCode)
+        {
+            var oRouteConfig = {};
+            if (typeof iShopNo == 'undefined') {
+                oRouteConfig.shop_no = CAFE24.SDE_SHOP_NUM;
+            } else {
+                oRouteConfig.shop_no = iShopNo;
+            }
+            if (typeof bMobile == 'undefined') {
+                oRouteConfig.is_mobile = false;
+            } else {
+                oRouteConfig.is_mobile = bMobile;
+            }
+            if (typeof sFrontLanguage == 'undefined') {
+                oRouteConfig.language_code = '';
+            }else {
+                oRouteConfig.language_code = sFrontLanguage; // 내부에서 로직으로 동작할땐 언어_지역 형태의 로케일 형태를 따른다.
+            }
+            if (typeof sSkinCode == 'undefined') {
+                oRouteConfig.skin_code = '';
+            }else {
+                oRouteConfig.skin_code = sSkinCode;
+            }
+
+            var sDomain = '';
+            if (oRouteConfig.shop_no != CAFE24.SDE_SHOP_NUM) {
+                // 접근된 다른 멀티샵 도메인 정보는 primary domain 를 조회해야함으로 ajax 를 통해 정보를 얻는다.
+                sDomain = this._getUrlDomainMultishop(oRouteConfig);
+            } else {
+                // 샵이 동일할 경우에는 접근된 domain 에 path 정보만 정리하여 반환함.
+                sDomain = this._getUrlDomain(oRouteConfig);
+            }
+            return sDomain;
+        },
+        _getUrlDomainMultishop: function (oRouteConfig)
+        {
+            var sDomain = '';
+            EC$.ajax({
+                type: 'GET',
+                url: '/exec/front/Shop/Domain',
+                data: {
+                    '_shop_no' : oRouteConfig.shop_no,
+                    'is_mobile' : oRouteConfig.is_mobile,
+                    'language_code' : oRouteConfig.language_code,
+                    'skin_code' : oRouteConfig.skin_code,
+                },
+                async: false,
+                dataType: 'json',
+                cache: true,
+                success: function(oResult) {
+                    switch (oResult.code) {
+                        case '0000' :
+                            sDomain = oResult.data;
+                            break;
+                        default :
+                            break;
+                    }
+                    return false;
+                }
+            });
+            return sDomain;
+        },
+        _getUrlDomain: function (oRouteConfig)
+        {
+            oRouteConfig.domain = this._getCreateHost(oRouteConfig);
+            return location.protocol + '//' + oRouteConfig.domain + this._getCreateUri(oRouteConfig);
+        },
+        _getCreateHost : function (oRouteConfig)
+        {
+            var sHost = location.host;
+            var aHost = sHost.split('.');
+            if (this.isBaseDomain(sHost)) {
+                if (aHost.length > 3) {
+                    aHost[0] = '';
+                }
+            } else if (oRouteConfig.is_mobile) {
+                if (this.isMobileDomain()) {
+                    oRouteConfig.is_mobile = false;
+                }
+            }
+            return aHost.filter(Boolean).join('.');
+        },
+        _getCreateUri: function (oRouteInfo)
+        {
+            var aUrl = [];
+            if (this.isBaseDomain() && oRouteInfo.shop_no > 1) {
+                aUrl.push('shop' + oRouteInfo.shop_no);
+            }
+            if (oRouteInfo.is_mobile) {
+                aUrl.push('m');
+            }
+            if (oRouteInfo.language_code != 'ZZ' && oRouteInfo.language_code != '') {
+                var iIndex = Object.values(CAFE24.ROUTE.support_language_list).indexOf(oRouteInfo.language_code);
+                if (iIndex !== -1) {
+                    aUrl.push(Object.keys(CAFE24.ROUTE.support_language_list)[iIndex]);
+                }
+            }
+            if (this.isBaseDomain() && oRouteInfo.skin_code != 'default' && oRouteInfo.skin_code != '') {
+                aUrl.push('skin-' + oRouteInfo.skin_code);
+            }
+            var sUrl= '/';
+            if (aUrl.length > 0) {
+                sUrl= '/' + aUrl.join('/');
+                sUrl = this.rtrim(sUrl, '/');
+            }
+            return sUrl;
+        },
+        /**
+         * en, en-US => en_US
+         */
+        convertValidLanguageCode: function (sUrlLanguageCode)
+        {
+            if (typeof CAFE24.ROUTE.support_language_list[sUrlLanguageCode] != 'undefined') {
+                return CAFE24.ROUTE.support_language_list[sUrlLanguageCode];
+            }
+            return false;
+        },
+        isMobileDomain: function (sHost)
+        {
+            if (typeof sHost == 'undefined') {
+                sHost = location.host;
+            }
+            var aMatched = sHost.match(/^(m|mobile|skin\-mobile|skin\-mobile[0-9]+[\-]{2}shop[0-9]+|skin\-mobile[0-9]+|mobile[\-]{2}shop[0-9]+)\./i);
+            return aMatched != null;
+        },
+        isBaseDomain: function (sHost)
+        {
+            if (typeof sHost == 'undefined') {
+                sHost = location.host;
+            }
+            return sHost.indexOf(CAFE24.GLOBAL_INFO.getRootDomain()) !== -1;
+        },
+        removePrefixUrl: function (sUrl)
+        {
+            if (this.isNeedRoute()) {
+                sUrl = sUrl.replace(this.getPrefixUrl('/'), '/'); // 자동으로  prefix 붙은 영역을 제거해준다.
+            }
+            return sUrl;
+        },
+        getPrefixUrl: function (sUrl)
+        {
+            if (this.isNeedRoute() === false) {
+                return sUrl;
+            }
+            if (sUrl.indexOf('/') !== 0) {
+                return sUrl;
+            }
+            if (sUrl.match(/^\/{2,}/) !== null) {
+                return sUrl;
+            }
+
+            var iCachedPosition = this.aFromList.indexOf(sUrl);
+            if (iCachedPosition > -1) {
+                return this.aToList[iCachedPosition];
+            }
+
+            var bTailSlash = (sCleanUrl !== '/' && sUrl.substr(-1) === '/');
+            var sCleanUrl = this.getCleanUrl(sUrl);
+            var aPrefixPart = CAFE24.ROUTE.path.prefix.split('/');
+            var aUrlPart = sCleanUrl.split('/');
+            var bMatched = true;
+            var sReturnUrl = sCleanUrl;
+            if (aUrlPart.length < aPrefixPart.length) {
+                bMatched = false;
+            } else {
+                for (var i = 0; i < aPrefixPart.length ; i++) {
+                    if (aPrefixPart[i] != aUrlPart[i]) {
+                        bMatched = false;
+                        break;
+                    }
+                }
+            }
+            if (bMatched === false) {
+                if (sCleanUrl == '/') {
+                    sReturnUrl = CAFE24.ROUTE.path.prefix;
+                } else {
+                    sReturnUrl = CAFE24.ROUTE.path.prefix +  sCleanUrl;
+                }
+                sReturnUrl = bTailSlash ? sReturnUrl : this.rtrim(sReturnUrl, '/')
+                this.aFromList.push(sUrl);
+                this.aToList.push(sReturnUrl);
+            }
+            return sReturnUrl;
+        },
+        /**
+         * document.location.pathname 이 필요할 경우 사용한다.
+         * @returns {*}
+         */
+        getPathName: function()
+        {
+            if (typeof CAFE24.ROUTE.path.result == 'undefined') {
+                return document.location.pathname;
+            }
+            return CAFE24.ROUTE.path.result;
+        },
+        rtrim: function (str, chr)
+        {
+            var rgxtrim = (!chr) ? new RegExp('\\s+$') : new RegExp(chr+'+$');
+            return str.replace(rgxtrim, '');
+        },
+        getShopNo: function ()
+        {
+            return CAFE24.ROUTE.shop_no;
+        },
+        getSkinCode: function ()
+        {
+            return CAFE24.ROUTE.skin_code;
+        },
+        getLanguageCode: function ()
+        {
+            return CAFE24.ROUTE.language_code;
+        },
+        getMobile: function ()
+        {
+            return CAFE24.ROUTE.is_mobile;
+        },
+        getIsMobile: function ()
+        {
+            return CAFE24.ROUTE.is_mobile || CAFE24.ROUTE.skin_code.match(/^mobile[0-9]*$/);
+        },
+        getCleanUrl: function (sUrl)
+        {
+            if (sUrl === '/') {
+                return sUrl;
+            }
+
+            var aUrl = sUrl.split('/');
+            aUrl.shift();
+
+            if (aUrl.length < 1) {
+                return sUrl;
+            }
+
+            // 현재 4 depth 까지 미리보기 기능이 구현되어있음
+            var iPos = 0;
+            var bFind = false;
+            for (var i = 0; i < aUrl.length ; i++) {
+                bFind = false;
+                for (var iSub = iPos, iSubCount = this.aCleanFilter.length; iSub < iSubCount ; iSub++) {
+                    if (aUrl[i].match(this.aCleanFilter[iSub]) !== null) {
+                        bFind = true;
+                        iPos = iSub + 1;
+                        aUrl.splice(i, 1);
+                        i--; // aUrl 을 삭제해 주었으니 검색 조건을 -1 제거하여 초기화 한다. 다음 for i++ 로 증감 조회됨.
+                        break;
+                    }
+                }
+                if (bFind === false) {
+                    break;
+                }
+            }
+            return '/' + aUrl.join('/');
+        },
+        getIsEasyUrl : function ()
+        {
+            return !window.location.pathname.match(/^[\w\/\-\.]+(php|html|htm)$/i);
+        }
+    };
+    EC_ROUTE.init();
+}
+</script>
+<meta name="path_role" content="MAIN">
+<meta name="author" content="포인핸드">
+<meta name="description" content="포인핸드는 전국 보호소 유기동물에게 가족을 찾아주는 플랫폼 서비스입니다.">
+<meta name="keywords" content="포인핸드, 유기동물 입양, 유기견 입양, 유기묘 입양, 유기동물, 유기견, 유기묘, 후원 굿즈, 유기동물 후원, 유기견 후원">    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        
+    <!-- PG크로스브라우징필수내용 -->
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+  
+	
+    
+    
+    
+    
+    
+
+    
+	
+    
+    <script src="./pawinhand-og_files/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="./pawinhand-og_files/owl.carousel.min.js"></script>
+
+    <script type="text/javascript" src="./pawinhand-og_files/pawinhand_ui.js"></script>
+    <script type="text/javascript" src="./pawinhand-og_files/ScrollMagic.min.js"></script>
+    <script type="text/javascript" src="./pawinhand-og_files/TweenMax.min.js"></script>
+    <script type="text/javascript" src="./pawinhand-og_files/pawinhand_layout.js"></script>
+    
+    
+    
+    
+    
+
+<meta property="og:title" content="포인핸드 - 사지않고 입양하는 문화를 만듭니다.">
+<meta property="og:description" content="포인핸드는 전국 보호소 유기동물에게 가족을 찾아주는 플랫폼 서비스입니다.">
+<meta property="og:image" content="https://pawinhand.s3.ap-northeast-2.amazonaws.com/images/banners/pawinhandmall_thumbnail_2022_2.jpg">
+<meta name="naver-site-verification" content="0e82b62b24fc40e9fa9de0435065581a425b6f87"><meta name="facebook-domain-verification" content="kwbmhz2vdtito1oyyuraqpbz0er12x">
+<link rel="canonical" href="https://pawinhand.kr/">
+<link rel="alternate" href="https://m.pawinhand.kr/">
+<meta property="og:url" content="https://pawinhand.kr">
+<meta property="og:title" content="포인핸드 - 사지않고 입양하는 문화를 만듭니다.">
+<meta property="og:description" content="포인핸드는 전국 보호소 유기동물에게 가족을 찾아주는 플랫폼 서비스입니다.">
+<meta property="og:site_name" content="포인핸드">
+<meta property="og:type" content="website">
+<link rel="shortcut icon" href="https://pawinhand.kr/web/upload/favicon-efa6b1eb741375761413516ae90998b4.ico">
+<script type="text/javascript" src="./pawinhand-og_files/wcslog.js"></script>
+<script type="text/javascript">var CAFE24API = { instance : [], MALL_ID : 'pawinhand1', SHOP_NO : 1, init : function (appInfo) { if (typeof appInfo == 'object') { if (appInfo.hasOwnProperty('client_id')) { var appKey = appInfo.client_id; } } else { var appKey = appInfo; } if (appKey) { if (!this.instance[appKey]) { CAFE24API.clientId = appKey; if (appInfo.hasOwnProperty('version')) { CAFE24API.version = appInfo.version; } else { if (CAFE24API.hasOwnProperty('version')) { delete CAFE24API.version; } } var copyObject = CAFE24API.constructor(); for (var attr in CAFE24API) { if (CAFE24API.hasOwnProperty(attr)) { copyObject[attr] = CAFE24API[attr]; } } this.instance[appKey] = copyObject; } return this.instance[appKey]; } }, initializeXhr : function () { try { return new XMLHttpRequest(); } catch (error) { return new window.ActiveXObject('Microsoft.XMLHTTP'); } }, fullPath: function (url) { return 'https://pawinhand1.cafe24api.com' + url; }, getLoginProvider: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback({'login': CAPP_ASYNC_METHODS.AppCommon.getLoginProvider()}); }, getCustomerProvider: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback({'login': CAPP_ASYNC_METHODS.AppCommon.getCustomerProvider()}); }, getMemberID: function (callback) { if (!CAPP_ASYNC_METHODS.IS_LOGIN) { callback(null); } else { callback(CAPP_ASYNC_METHODS.AppCommon.getMemberID()); } }, getEncryptedMemberId: function (client_id, callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback(null, CAPP_ASYNC_METHODS.AppCommon.getEncryptedMemberId(client_id)); }, getMemberInfo: function (callback) { callback({'id': CAPP_ASYNC_METHODS.AppCommon.getMemberInfo()}); }, getCustomerIDInfo: function (callback) { if (!CAFE24API.__scopeErr(callback, 'application')) { return; } callback(null, {'id': CAPP_ASYNC_METHODS.AppCommon.getCustomerIDInfo()}); }, getCustomerInfo: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback(null, {'customer': CAPP_ASYNC_METHODS.AppCommon.getCustomerInfo()}); }, getMileageInfo: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback(null, {'mileage': CAPP_ASYNC_METHODS.AppCommon.getMileageInfo()}); }, getPointInfo: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback(null, {'point': CAPP_ASYNC_METHODS.AppCommon.getPointInfo()}); }, getDepositInfo: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback(null, {'deposit': CAPP_ASYNC_METHODS.AppCommon.getDepositInfo()}); }, getCreditInfo: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback(null, {'credit': CAPP_ASYNC_METHODS.AppCommon.getCreditInfo()}); }, getCartList: function (callback) { if (!CAFE24API.__scopeErr(callback, 'personal')) { return; } CAPP_ASYNC_METHODS.AppCommon.getCartList().then(function(data){ callback(null, {'carts': data}); }); }, getCartInfo: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'personal')) { return; } callback(null, {'cart': CAPP_ASYNC_METHODS.AppCommon.getCartInfo()}); }, getCartItemList: function (callback) { if (!CAFE24API.__scopeErr(callback, 'order')) { return; } callback(null, {'items': CAPP_ASYNC_METHODS.AppCommon.getCartItemList()}); }, getCartCount: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'personal')) { return; } callback(null, CAPP_ASYNC_METHODS.AppCommon.getCartCount()); }, getCouponCount: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'promotion')) { return; } callback(null, CAPP_ASYNC_METHODS.AppCommon.getCouponCount()); }, getWishCount: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'personal')) { return; } callback(null, CAPP_ASYNC_METHODS.AppCommon.getWishCount()); }, getShopInfo: function (callback) { if (!CAFE24API.__scopeErr(callback, 'store')) { return; } callback(null, {'shop': CAPP_ASYNC_METHODS.AppCommon.getShopInfo()}); }, addCurrentProductToCart: function (mall_id, time, app_key, member_id, hmac, callback) { if (!CAFE24API.__scopeErr(callback, 'order')) { return; } CAPP_ASYNC_METHODS.AppCommon.addCurrentProductToCart(mall_id, time, app_key, member_id, hmac).then(function(data){ callback(null, {'cart': data}); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error('422'), {'error': {code: 422, message: 'This sdk is not available on the current page'}}); } }); }, precreateOrder: function (mall_id, time, app_key, member_id, hmac, callback) { if (!CAFE24API.__scopeErr(callback, 'order')) { return; } CAPP_ASYNC_METHODS.AppCommon.precreateOrder(mall_id, time, app_key, member_id, hmac).then(function(data){ callback(null, {'order': data}); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error('422'), {'error': {code: 422, message: 'This sdk is not available on the current page'}}); } }); }, getOrderItemList: function (start_date, end_date, order_status, page, count, order_id, callback) { if (!CAFE24API.__scopeErr(callback, 'order')) { return; } CAPP_ASYNC_METHODS.AppCommon.getOrderItemList(start_date, end_date, order_status, page, count, order_id).then(function(data){ callback(null, {'items': data}); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error(422), { 'error': { code: 422, message: 'This sdk is not available on the current page' } }); } }); }, getOrderDetailInfo: function (shop_no, order_id, callback) { if (!CAFE24API.__scopeErr(callback, 'order')) { return; } CAPP_ASYNC_METHODS.AppCommon.getOrderDetailInfo(shop_no, order_id).then(function(data){ callback(null, {'orders': data}); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error(422), { 'error': { code: 422, message: 'This sdk is not available on the current page' } }); } }); }, getClaimableItemList: function (order_id, customer_service_type, callback) { if (!CAFE24API.__scopeErr(callback, 'order')) { return; } CAPP_ASYNC_METHODS.AppCommon.getClaimableItemList(order_id, customer_service_type).then(function(data){ callback(null, {'items': data}); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error(422), { 'error': { code: 422, message: 'This sdk is not available on the current page' } }); } }); }, emptyCart: function (basket_shipping_type, callback) { if (!CAFE24API.__scopeErr(callback, 'personal')) { return; } CAPP_ASYNC_METHODS.AppCommon.emptyCart(basket_shipping_type).then(function (data) { callback(null, {'result': data}); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error(422), { 'error': { code: 422, message: 'This sdk is not available on the current page' } }); } }) ; }, deleteCartItems: function (basket_shipping_type, product_list, callback) { if (!CAFE24API.__scopeErr(callback, 'personal')) { return; } CAPP_ASYNC_METHODS.AppCommon.deleteCartItems(basket_shipping_type, product_list).then(function (data) { callback(null, {'result': data}); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error(422), { 'error': { code: 422, message: 'This sdk is not available on the current page' } }); } }) ; }, addCart: function (basket_type, prepaid_shipping_fee, product_list, callback) { if (!CAFE24API.__scopeErr(callback, 'personal')) { return; } CAPP_ASYNC_METHODS.AppCommon.addCart(basket_type, prepaid_shipping_fee, product_list).then(function (data) { callback(null, data); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error(422), { 'error': { code: 422, message: 'This sdk is not available on the current page' } }); } }) }, addBundleProductsCart: function (basket_type, prepaid_shipping_fee, product_list, callback) { if (!CAFE24API.__scopeErr(callback, 'personal')) { return; } CAPP_ASYNC_METHODS.AppCommon.addBundleProductsCart(basket_type, prepaid_shipping_fee, product_list).then(function (data) { callback(null, data); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error(422), { 'error': { code: 422, message: 'This sdk is not available on the current page' } }); } }) }, get : function(url, callback) { return CAFE24API.complete('GET', url, this, null, callback); }, post : function(url, params, callback) { return CAFE24API.complete('POST', url, this, params, callback); }, put : function(url, params, callback) { return CAFE24API.complete('PUT', url, this, params, callback); }, delete : function(url, callback) { return CAFE24API.complete('DELETE', url, this, null, callback); }, complete : function(method, url, obj, params, callback) { var xhr = CAFE24API.sendXhr(method, url, obj, params, callback); xhr.onreadystatechange = function () { if (xhr.readyState === XMLHttpRequest.DONE) { if (xhr.status >= 200 && xhr.status <= 208) { callback(null, JSON.parse(xhr.responseText)); } else { callback(new Error(xhr.status), JSON.parse(xhr.responseText)); } } }; }, sendXhr : function (method, url, obj, params, callback) { if (method !== 'POST') { var url = obj.fullPath(url); } var xhr = obj.initializeXhr(); var queryVars = {}; if (obj.clientId) queryVars['cafe24_app_key'] = obj.clientId; if (obj.version) queryVars['cafe24_api_version'] = obj.version; if (params === null) { var seperator = url.indexOf('?') == -1 ? '?' : '&'; var queryString = []; for (var key in queryVars) { queryString.push(key + '=' + queryVars[key]); } if (queryString.length > 0) { url = url + seperator + queryString.join('&'); } } xhr.open(method, url, true); if (typeof params == 'object' && params !== null) { xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded; charset=utf-8'); for (var key in queryVars) { params[key] = queryVars[key]; } params = 'formData=' + JSON.stringify(params); } xhr.send(params || null); return xhr; }, __sessionErr: function (callback) { callback(new Error(403), {'error': {code: 403, message: 'Failed to get session. Only available when log in.'}}); }, __scopeErr: function (callback, scope) { if (typeof CAFE24.APPSCRIPT_SDK_DATA != "undefined" && jQuery.inArray(scope, CAFE24.APPSCRIPT_SDK_DATA ) > -1 ) { return true; } callback(new Error(403), {'error': {code: 403, message: 'You do not have the necessary authority(scope) to use the SDK.'}}); }, __chkValidSessionScope: function (callback, scope) { if (!CAPP_ASYNC_METHODS.IS_LOGIN) { CAFE24API.__sessionErr(callback); return false; } if (!CAFE24API.__scopeErr(callback, scope)) { return false; } return true; } }; </script>
+<script type="text/javascript">
+window.CAFE24 = window.CAFE24 || {};
+CAFE24.MANIFEST_CACHE_REVISION = '2412161356';
+CAFE24.getDeprecatedNamespace = function(sDeprecatedNamespace, sSupersededNamespace) {
+var sNamespace = sSupersededNamespace 
+? sSupersededNamespace 
+: sDeprecatedNamespace.replace(/^EC_/, '');
+return CAFE24[sNamespace];
+}
+CAFE24.FRONT_LANGUAGE_CODE = "ko_KR";
+CAFE24.MOBILE = false;
+CAFE24.MOBILE_DEVICE = false;
+CAFE24.MOBILE_USE = true;
+var EC_MOBILE = CAFE24.MOBILE;
+var EC_MOBILE_DEVICE = CAFE24.MOBILE_DEVICE;
+var EC_MOBILE_USE = CAFE24.MOBILE_USE;
+CAFE24.SKIN_CODE = "skin20";
+CAFE24.FRONT_EXTERNAL_SCRIPT_VARIABLE_DATA = {"common_member_id_crypt":""};
+var EC_FRONT_EXTERNAL_SCRIPT_VARIABLE_DATA = CAFE24.getDeprecatedNamespace('EC_FRONT_EXTERNAL_SCRIPT_VARIABLE_DATA');
+CAFE24.SDE_SHOP_NUM = 1;CAFE24.SHOP = {getLanguage : function() { return "ko_KR"; },getCurrency : function() { return "KRW"; },getFlagCode : function() { return "KR"; },getTimezone: function() { return "Asia/Seoul" },getDateFormat: function() { return "Y-m-d" },isMultiShop : function() { return false; },isDefaultShop : function() { return true; },isDefaultLanguageShop : function(sLanguageCode) { return SHOP.isDefaultShop() && SHOP.isLanguageShop(sLanguageCode); },isKR : function() { return true; },isUS : function() { return false; },isJP : function() { return false; },isCN : function() { return false; },isTW : function() { return false; },isES : function() { return false; },isPT : function() { return false; },isVN : function() { return false; },isPH : function() { return false; },getCountryAndLangMap : function() { return {
+"KR": "ko_KR",
+"US": "en_US",
+"JP": "ja_JP",
+"CN": "zh_CN",
+"TW": "zh_TW",
+"VN": "vi_VN",
+"PH": "en_PH"
+}},isLanguageShop : function(sLanguageCode) { return sLanguageCode === "ko_KR"; },getDefaultShopNo : function() { return 1; },getProductVer : function() { return 2; },isSDE : function() { return true; },isMode : function() {return true; },getModeName : function() {return true; },isMobileAdmin : function() {return false; },isNewProMode : function() {return false; },isExperienceMall : function() { return false; },isDcollection : function() {return false; },isYoutubeShops : function() {return false; },getYtShopsShopNo : function() {return 0; },getAdminID : function() {return ''},getMallID : function() {return 'pawinhand1'},getCurrencyFormat : function(sPriceTxt, bIsNumberFormat) { 
+sPriceTxt = String(sPriceTxt);
+var aCurrencySymbol = ["","\uc6d0",false];
+if (typeof CAFE24.SHOP_PRICE !== 'undefined' && isNaN(sPriceTxt.replace(/[,]/gi, '')) === false && bIsNumberFormat === true) {
+// bIsNumberFormat 사용하려면 Ui(':libUipackCurrency')->plugin('Currency') 화폐 라이브러리 추가 필요
+sPriceTxt = CAFE24.SHOP_PRICE.toShopPrice(sPriceTxt.replace(/[,]/gi, ''), true, CAFE24.SDE_SHOP_NUM);
+}
+try {
+var sPlusMinusSign = (sPriceTxt.toString()).substr(0, 1);
+if (sPlusMinusSign === '-' || sPlusMinusSign === '+') {
+sPriceTxt = (sPriceTxt.toString()).substr(1);
+return sPlusMinusSign + aCurrencySymbol[0] + sPriceTxt + aCurrencySymbol[1];
+} else {
+return aCurrencySymbol[0] + sPriceTxt + aCurrencySymbol[1];
+}
+} catch (e) {
+return aCurrencySymbol[0] + sPriceTxt + aCurrencySymbol[1];
+}
+}};CAFE24.CURRENCY_INFO = {getOriginReferenceCurrency : function() {return 'USD'},getCurrencyList : function(sCurrencyCode) { var aCurrencyList = {"JPY":{"currency_symbol":"&yen;","decimal_place":0,"round_method_type":"F"},"VND":{"currency_symbol":"&#8363;","decimal_place":0,"round_method_type":"F"},"PHP":{"currency_symbol":"&#8369;","decimal_place":2,"round_method_type":"R"},"USD":{"currency_symbol":"$","decimal_place":2,"round_method_type":"R"},"CNY":{"currency_symbol":"&yen;","decimal_place":2,"round_method_type":"R"},"TWD":{"currency_symbol":"NT$","decimal_place":0,"round_method_type":"F"},"EUR":{"currency_symbol":"\u20ac","decimal_place":2,"round_method_type":"R"},"BRL":{"currency_symbol":"R$","decimal_place":2,"round_method_type":"R"},"AUD":{"currency_symbol":"A$","decimal_place":2,"round_method_type":"R"},"BHD":{"currency_symbol":".&#1583;.&#1576;","decimal_place":3,"round_method_type":"R"},"BDT":{"currency_symbol":"&#2547;","decimal_place":2,"round_method_type":"R"},"GBP":{"currency_symbol":"&pound;","decimal_place":2,"round_method_type":"R"},"CAD":{"currency_symbol":"C$","decimal_place":2,"round_method_type":"R"},"CZK":{"currency_symbol":"K&#269;","decimal_place":2,"round_method_type":"R"},"DKK":{"currency_symbol":"kr","decimal_place":2,"round_method_type":"R"},"HKD":{"currency_symbol":"HK$","decimal_place":2,"round_method_type":"R"},"HUF":{"currency_symbol":"Ft","decimal_place":2,"round_method_type":"R"},"INR":{"currency_symbol":"&#8377;","decimal_place":2,"round_method_type":"R"},"IDR":{"currency_symbol":"Rp","decimal_place":0,"round_method_type":"F"},"ILS":{"currency_symbol":"&#8362;","decimal_place":2,"round_method_type":"R"},"JOD":{"currency_symbol":" &#1583;&#1610;&#1606;&#1575;&#1585;","decimal_place":3,"round_method_type":"R"},"KWD":{"currency_symbol":"&#1583;&#1610;&#1606;&#1575;&#1585;","decimal_place":3,"round_method_type":"R"},"MYR":{"currency_symbol":"RM","decimal_place":2,"round_method_type":"R"},"MXN":{"currency_symbol":"Mex$","decimal_place":2,"round_method_type":"R"},"NZD":{"currency_symbol":"NZ$","decimal_place":2,"round_method_type":"R"},"NOK":{"currency_symbol":"kr","decimal_place":2,"round_method_type":"R"},"PKR":{"currency_symbol":"&#8360;","decimal_place":2,"round_method_type":"R"},"PLN":{"currency_symbol":"z\u0142","decimal_place":2,"round_method_type":"R"},"RUB":{"currency_symbol":"\u0440\u0443\u0431","decimal_place":2,"round_method_type":"R"},"SAR":{"currency_symbol":"&#65020;","decimal_place":2,"round_method_type":"R"},"SGD":{"currency_symbol":"S$","decimal_place":2,"round_method_type":"R"},"ZAR":{"currency_symbol":"R","decimal_place":2,"round_method_type":"R"},"SEK":{"currency_symbol":"kr","decimal_place":2,"round_method_type":"R"},"CHF":{"currency_symbol":"Fr","decimal_place":2,"round_method_type":"R"},"THB":{"currency_symbol":"&#3647;","decimal_place":2,"round_method_type":"R"},"TRY":{"currency_symbol":"TL","decimal_place":2,"round_method_type":"R"},"AED":{"currency_symbol":"&#1601;&#1604;&#1587;","decimal_place":2,"round_method_type":"R"}}; return aCurrencyList[sCurrencyCode] },isUseReferenceCurrency : function() {return false }};CAFE24.COMMON_UTIL = {convertSslForString : function(sString) { return sString.replace(/http:/gi, '');},convertSslForHtml : function(sHtml) { return sHtml.replace(/((?:src|href)\s*=\s*['"])http:(\/\/(?:[a-z0-9\-_\.]+)\/)/ig, '$1$2');},getProtocol : function() { return 'https'; },moveSsl : function() { if (CAFE24.COMMON_UTIL.getProtocol() === 'http') { var oLocation = jQuery(window.location); var sUrl = 'https://' + oLocation.attr('host') + oLocation.attr('pathname') + oLocation.attr('search'); window.location.replace(sUrl); } },setEcCookie : function(sKey, sValue, iExpire) {var exdate = new Date();exdate.setDate(exdate.getDate() + iExpire);var setValue = escape(sValue) + "; domain=." + CAFE24.GLOBAL_INFO.getBaseDomain() + "; path=/;expires=" + exdate.toUTCString();document.cookie = sKey + "=" + setValue;}};CAFE24.SHOP_LIB_INFO = {getBankInfo : function() { 
+var oBankInfo = "";
+$.ajax({
+type: "GET",
+url: "/exec/front/Shop/Bankinfo",
+dataType: "json",
+async: false,
+success: function(oResponse) {
+oBankInfo = oResponse;
+}
+});
+return oBankInfo; }};            var EC_SDE_SHOP_NUM = CAFE24.SDE_SHOP_NUM;
+var SHOP = CAFE24.getDeprecatedNamespace('SHOP');
+var EC_COMMON_UTIL = CAFE24.getDeprecatedNamespace('EC_COMMON_UTIL');
+var EC_SHOP_LIB_INFO = CAFE24.getDeprecatedNamespace('EC_SHOP_LIB_INFO');
+var EC_CURRENCY_INFO = CAFE24.getDeprecatedNamespace('EC_CURRENCY_INFO');
+CAFE24.ROOT_DOMAIN = "cafe24.com";
+CAFE24.API_DOMAIN = "cafe24api.com";
+CAFE24.TRANSLATE_LOG_STATUS = "F";
+CAFE24.GLOBAL_INFO = (function() {
+var oData = {"base_domain":"pawinhand1.cafe24.com","root_domain":"cafe24.com","api_domain":"cafe24api.com","is_global":false,"is_global_standard":false,"country_code":"KR","language_code":"ko_KR","admin_language_code":"ko_KR"};
+return {
+getBaseDomain: function() {
+return oData['base_domain'];
+},
+getRootDomain: function() {
+return oData['root_domain'];
+},
+getApiDomain: function() {
+return oData['api_domain'];
+},
+isGlobal: function() {
+return oData['is_global'];
+},
+isGlobalStandard: function() {
+return oData['is_global_standard'];
+},
+getCountryCode: function() {
+return oData['country_code'];
+},
+getLanguageCode: function() {
+return oData['language_code'];
+},
+getAdminLanguageCode: function() {
+return oData['admin_language_code'];
+}
+};
+})();
+var EC_ROOT_DOMAIN = CAFE24.ROOT_DOMAIN;
+var EC_API_DOMAIN = CAFE24.API_DOMAIN;
+var EC_TRANSLATE_LOG_STATUS = CAFE24.TRANSLATE_LOG_STATUS;
+var EC_GLOBAL_INFO = CAFE24.getDeprecatedNamespace('EC_GLOBAL_INFO');
+CAFE24.AVAILABLE_LANGUAGE = ["ko_KR","zh_CN","en_US","zh_TW","es_ES","pt_PT","vi_VN","ja_JP","en_PH"];
+CAFE24.AVAILABLE_LANGUAGE_CODES = {"ko_KR":"KOR","zh_CN":"CHN","en_US":"ENG","zh_TW":"TWN","es_ES":"ESP","pt_PT":"PRT","vi_VN":"VNM","ja_JP":"JPN","en_PH":"PHL"};
+var EC_AVAILABLE_LANGUAGE = CAFE24.AVAILABLE_LANGUAGE;
+var EC_AVAILABLE_LANGUAGE_CODES = CAFE24.AVAILABLE_LANGUAGE_CODES;
+CAFE24.GLOBAL_PRODUCT_LANGUAGE_CODES = {  
+sClearanceCategoryCode: '',
+sManualLink: '//support.cafe24.com/hc/ko/articles/7739013909529',
+sHsCodePopupLink: 'https://www.wcotradetools.org/en/harmonized-system',
+aCustomRegex: '"PHL" : "^[0-9]{8}[A-Z]?$"',
+sCountryCodeData: 'kor',
+sEnglishExampleURlForGlobal: '',
+aReverseAddressCountryCode: ["VNM","PHL"],
+aSizeGuideCountryAlign: '["US","UK","EU","KR","JP","CN"]',
+aIsSupportTran: ["ja_JP","zh_CN","zh_TW","en_US","vi_VN","en_PH","pt_PT","es_ES"]
+};
+var EC_GLOBAL_PRODUCT_LANGUAGE_CODES = CAFE24.getDeprecatedNamespace('EC_GLOBAL_PRODUCT_LANGUAGE_CODES');
+CAFE24.GLOBAL_ORDER_LANGUAGE_CODES = {
+aModifyOrderLanguage: {"KR":"ko_KR","JP":"ja_JP","CN":"zh_CN","TW":"zh_TW","VN":"vi_VN","PH":"en_PH"},
+aUseIdCardKeyCountry: ["CN","TW"],
+aLanguageWithCountryCode: {"zh_CN":["CN","CHN","HK","HNK"],"ja_JP":["JP","JPN"],"zh_TW":["TW","TWN"],"ko_KR":["KR","KOR"],"vi_VN":["VN","VNM"],"en_PH":["PH","PHL"]},
+aCheckDisplayRequiredIcon: ["ja_JP","zh_CN","zh_TW","en_US","vi_VN","en_PH"],
+aSetReceiverName: {"zh_CN":{"sCountry":"CN","bUseLastName":true},"zh_TW":{"sCountry":"TW","bUseLastName":false},"ja_JP":{"sCountry":"JP","bUseLastName":true}},
+aSetDeferPaymethodLanguage: {"ja_JP":"\uc77c\ubcf8","zh_CN":"\uc911\uad6d"},
+aUseDeferPaymethod: ["ja_JP","zh_CN"],
+aCheckShippingCompanyAndPaymethod: ["ja_JP","zh_CN"],
+aSetDeferPaymethodLanguageForShipping: {"ja_JP":"\u65e5\u672c","zh_CN":"\uc911\uad6d"},
+aCheckStoreByPaymethod: ["ja_JP","zh_CN"],
+aCheckIsEmailRequiredForJs: ["en_US","zh_CN","zh_TW","ja_JP","vi_VN","en_PH"],
+aSetIdCardKeyCountryLanguage: {"CN":"\uc911\uad6d\uc758","TW":"\ub300\ub9cc\uc758"},
+aReverseGlobalAddress: ["en_PH","vi_VN","PHL","VNM","VN","PH"],
+aNoCheckZipCode: ["KOR","JPN"],
+aNotPostCodeAPICountryList: ["en_US","es_ES","pt_PT","en_PH"],
+aEnableSearchExchangeAddr: ["KR","JP","CN","VN","TW","PH"],
+aDuplicatedBaseAddr: ["TW","JP"],
+aReverseAddressCountryCode: ["VN","PH"],
+aCheckZipCode: ["PHL","en_PH","PH"]
+};
+var EC_GLOBAL_ORDER_LANGUAGE_CODES = CAFE24.getDeprecatedNamespace('EC_GLOBAL_ORDER_LANGUAGE_CODES');
+CAFE24.GLOBAL_MEMBER_LANGUAGE_CODES = {  
+sAdminWebEditorLanguageCode: 'ko' ,
+oNotAvailDecimalPointLanguages: ["ko_KR","ja_JP","zh_TW","vi_VN"],
+oAddressCountryCode: {"KOR":"ko_KR","JPN":"ja_JP","CHN":"zh_CN","TWN":"zh_TW","VNM":"vi_VN","PHL":"en_PH"},
+};
+var EC_GLOBAL_MEMBER_LANGUAGE_CODES = CAFE24.getDeprecatedNamespace('EC_GLOBAL_MEMBER_LANGUAGE_CODES');
+CAFE24.GLOBAL_BOARD_LANGUAGE_CODES = {  
+bUseLegacyBoard: true
+};
+var EC_GLOBAL_BOARD_LANGUAGE_CODES = CAFE24.getDeprecatedNamespace('EC_GLOBAL_BOARD_LANGUAGE_CODES');
+CAFE24.GLOBAL_MALL_LANGUAGE_CODES = {
+oDesign: {
+oDesignAddReplaceInfo: {"group_id":"SKIN.ADD.ADMIN.DESIGNDETAIL","replacement":{"KR":"KOREAN","US":"ENGLISH","JP":"JAPANESE","CN":"SIMPLIFIED.CHINESE","TW":"TRADITIONAL.CHINESE","ES":"SPANISH","PT":"PORTUGUESE","PH":"ENGLISH"}},
+oDesignDetailLanguageCountryMap: {"KR":"ko_KR","JP":"ja_JP","CN":"zh_CN","TW":"zh_TW","US":"en_US","ES":"es_ES","PT":"pt_PT","PH":"en_PH"},
+oSmartDesignSwitchTipLink: {"edibot":{"img":"\/\/img.echosting.cafe24.com\/smartAdmin\/img\/design\/img_editor_dnd.png","link":"\/\/ecsupport.cafe24.com\/board\/free\/list.html?board_act=list&board_no=12&category_no=9&cate_no=9"},"smart":{"img":"\/\/img.echosting.cafe24.com\/smartAdmin\/img\/design\/ko_KR\/img_editor_smart.png","link":"\/\/sdsupport.cafe24.com"}},
+oSmartDesignDecoShopList: ["ko_KR","ja_JP","zh_CN","en_US","zh_TW","es_ES","pt_PT"],
+oSmartDesignDecoMultilingual: {"list":{"ko_KR":"KOREAN","en_US":"ENGLISH","ja_JP":"JAPANESE","zh_CN":"SIMPLIFIED.CHINESE","zh_TW":"TRADITIONAL.CHINESE","es_ES":"SPANISH","pt_PT":"PORTUGUESE","vi_VN":"VIETNAMESE"},"group_id":"EDITOR.LAYER.EDITING.DECO"},
+aSmartDesignModuleShopList: ["ko_KR","ja_JP","zh_CN","en_US","zh_TW","es_ES","pt_PT"]
+},
+oStore: {
+oMultiShopCurrencyInfo: {"en_US":{"currency":"USD"},"zh_CN":{"currency":"USD","sub_currency":"CNY"},"ja_JP":{"currency":"JPY"},"zh_TW":{"currency":"TWD"},"es_ES":{"currency":"EUR"},"pt_PT":{"currency":"EUR"},"ko_KR":{"currency":"KRW"},"vi_VN":{"currency":"VND"},"en_PH":{"currency":"PHP"}},
+oBrowserRedirectLanguage: {"ko":{"primary":"ko_KR","secondary":"en_US"},"en":{"detail":{"en-ph":{"primary":"en_PH","secondary":"en_US"},"en-us":{"primary":"en_US","secondary":"es_ES"},"default":{"primary":"en_US","secondary":"es_ES"}}},"ja":{"primary":"ja_JP","secondary":"en_US"},"zh":{"detail":{"zh-cn":{"primary":"zh_CN","secondary":"en_US"},"zh-tw":{"primary":"zh_TW","secondary":"zh_CN"},"default":{"primary":"en_US","secondary":"ko_KR"}}},"es":{"primary":"es_ES","secondary":"en_US"},"pt":{"primary":"pt_PT","secondary":"en_US"},"vi":{"primary":"vi_VN","secondary":"en_US"},"default":{"primary":"en_US","secondary":"ko_KR"}},
+aChangeableLanguages: ["en_US","ja_JP","ko_KR"],
+aNoZipCodeLanguage: ["ko_KR","ja_JP"]
+},
+oMobile: {
+sSmartWebAppFaqUrl: "https://support.cafe24.com/hc/ko/articles/8466586607641",
+sAmpFaqUrl: "https://ecsupport.cafe24.com/board/free/read.html?no=1864&board_no=5&category_no=13&cate_no=13&category_no=13&category_no=13",
+},
+oPromotion: {
+bQrCodeAvailable: true,
+bSnsMarketingAvailable: true
+},
+oShippingReverseAddressLanguage: ["vi_VN","en_PH"] ,
+oGlobalStandardSwitchHelpCodeLink: {"SH.DS":{"link":"\/\/serviceguide.cafe24shop.com\/en_PH\/SH.DS.html"},"PR.DS":{"link":"\/\/serviceguide.cafe24shop.com\/en_PH\/PR.DS.html"},"OR.SM.BO":{"link":"\/\/serviceguide.cafe24shop.com\/en_PH\/OR.SM.BO.html"},"DE.DS":{"link":"\/\/serviceguide.cafe24shop.com\/en_PH\/DE.DS.html"},"MB.DS":{"link":"\/\/serviceguide.cafe24shop.com\/en_PH\/MB.DS.html"},"PM.DS":{"link":"\/\/serviceguide.cafe24shop.com\/en_PH\/PM.DS.html"}},
+getAdminMainLocaleLanguage: function(sSkinLocaleCode) {
+var oLocaleData = [];
+var locale = "";
+var shopLangName = "";
+if (sSkinLocaleCode == "US") {
+locale = "en_US";
+shopLangName = "ENGLISH";
+} else if (sSkinLocaleCode == "JP") {
+locale = "ja_JP";
+shopLangName = "JAPANESE";
+} else if (sSkinLocaleCode == "CN") {
+locale = "zh_CN";
+shopLangName = "SIMPLIFIED.CHINESE";
+} else if (sSkinLocaleCode == "TW") {
+locale = "zh_TW";
+shopLangName = "TRADITIONAL.CHINESE";
+} else if (sSkinLocaleCode == "ES") {
+locale = "es_ES";
+shopLangName = "SPANISH";
+} else if (sSkinLocaleCode == "PT") {
+locale = "pt_PT";
+shopLangName = "PORTUGUESE";
+} else if (sSkinLocaleCode == "VN") {
+locale = "vi_VN";
+shopLangName = "VIETNAMESE";
+} else if(sSkinLocaleCode == "PH") {
+locale = "en_PH";
+shopLangName = "ENGLISH.PH";
+}
+oLocaleData["locale"] = locale;
+oLocaleData["shopLangName"] = shopLangName;
+return oLocaleData;
+}
+};
+var EC_GLOBAL_MALL_LANGUAGE_CODES = CAFE24.getDeprecatedNamespace('EC_GLOBAL_MALL_LANGUAGE_CODES');
+CAFE24.GLOBAL_DATETIME_INFO = {
+oConstants: {"STANDARD_DATE_REGEX":"\/([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))\/","IN_ZONE":"inZone","OUT_ZONE":"outZone","IN_FORMAT":"inFormat","OUT_FORMAT":"outFormat","IN_DATE_FORMAT":"inDateFormat","IN_TIME_FORMAT":"inTimeFormat","OUT_DATE_FORMAT":"outDateFormat","OUT_TIME_FORMAT":"outTimeFormat","IN_FORMAT_DATE_ONLY":1,"IN_FORMAT_TIME_ONLY":2,"IN_FORMAT_ALL":3,"OUT_FORMAT_DATE_ONLY":1,"OUT_FORMAT_TIME_ONLY":2,"OUT_FORMAT_ALL":3,"DATE_ONLY":"YYYY-MM-DD","TIME_ONLY":"HH:mm:ss","FULL_TIME":"YYYY-MM-DD HH:mm:ss","ISO_8601":"YYYY-MM-DD[T]HH:mm:ssZ","YEAR_ONLY":"YYYY","MONTH_ONLY":"MM","DAY_ONLY":"DD","WEEK_ONLY":"e","TIME_H_I_ONLY":"HH:mm","TIME_HOUR_ONLY":"HH","TIME_MINUTE_ONLY":"mm","POSTGRE_FULL_TIME":"YYYY-MM-DD HH24:MI:SS","POSTGRE_TIME_ONLY":" HH24:MI:SS","MICRO_SECOND_ONLY":"u","SEOUL":"Asia\/Seoul","TOKYO":"Asia\/Tokyo","SHANGHAI":"Asia\/Shanghai","TAIPEI":"Asia\/Taipei","HANOI":"Asia\/Bangkok","LOS_ANGELES":"America\/Los_Angeles","LISBON":"Europe\/Lisbon","MADRID":"Europe\/Madrid","SINGAPORE":"Asia\/Singapore","UTC":"Etc\/UTC","MAX_DATETIME":"9999-12-31 23:59:59"},
+oOptions: {"inZone":"Asia\/Seoul","inFormat":"YYYY-MM-DD HH:mm:ss","inDateFormat":"YYYY-MM-DD","inTimeFormat":"HH:mm:ss","outZone":"Asia\/Seoul","outFormat":"YYYY-MM-DD HH:mm:ss","outDateFormat":"YYYY-MM-DD","outTimeFormat":"HH:mm:ss"},
+oPolicies: [],
+sOverrideTimezone: '',
+sMomentNamespace: 'EC_GLOBAL_MOMENT'
+};
+CAFE24.FRONT_JS_CONFIG_MANAGE = {"sSmartBannerScriptUrl":"https:\/\/app4you.cafe24.com\/SmartBanner\/tunnel\/scriptTags?vs=1563164396689206","sMallId":"pawinhand1","sDefaultAppDomain":"https:\/\/app4you.cafe24.com","sWebLogOffFlag":"F","cdnUrl":"https:\/\/cafe24.poxo.com\/ec01\/pawinhand1\/6aDrbsrpgztyixM+aENnH6HjH4TTykqgQt5HQjnLmP6XbyGTSvgS4FKKyxfnmmzX\/swHIcSYFKQg3+gyk9qXzw==\/_"};
+var EC_FRONT_JS_CONFIG_MANAGE = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_MANAGE');
+typeof window.CAFE24 === "undefined" && (window.CAFE24 = {});
+CAFE24.FRONTEND = {"FW_MANIFEST_CACHE_REVISION":2412161356,"IS_WEB_VIEW":"F"};
+CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","path":{"origin":"\/index.html","result":"\/index.html","prefix":""},"shop_no":0,"skin_code":"default","support_language_list":{"ar":"ar_EG","ar-EG":"ar_EG","de":"de_DE","de-DE":"de_DE","en":"en_US","en-IN":"en_IN","en-PH":"en_PH","en-US":"en_US","es":"es_ES","es-ES":"es_ES","hi":"hi_IN","hi-IN":"hi_IN","id":"id_ID","id-ID":"id_ID","it":"it_IT","it-IT":"it_IT","ja":"ja_JP","ja-JP":"ja_JP","ko":"ko_KR","ko-KR":"ko_KR","ms":"ms_MY","ms-MY":"ms_MY","pt":"pt_PT","pt-PT":"pt_PT","ru":"ru_RU","ru-RU":"ru_RU","th":"th_TH","th-TH":"th_TH","tr":"tr_TR","tr-TR":"tr_TR","vi":"vi_VN","vi-VN":"vi_VN","zh":"zh_CN","zh-CN":"zh_CN","zh-HK":"zh_HK","zh-MO":"zh_MO","zh-SG":"zh_SG","zh-TW":"zh_TW"}};
+</script>
+
+<link rel="stylesheet" type="text/css" href="./pawinhand-og_files/optimizer.php"><link rel="stylesheet" type="text/css" href="./pawinhand-og_files/optimizer_user.php">
+
+<title>포인핸드 - 사지 않고 입양하는 문화를 만듭니다.</title><script type="text/javascript" src="./pawinhand-og_files/scriptTagContent"></script><link id="smartPopup" rel="stylesheet" type="text/css" href="./pawinhand-og_files/front.css" media="all"><link rel="stylesheet" type="text/css" href="./pawinhand-og_files/smart-popup.slick.css"><script src="./pawinhand-og_files/smart-popup.slick.js"></script></head>
+<body class="body-main body-index pc" cz-shortcut-listen="true" data-new-gr-c-s-check-loaded="14.1213.0" data-gr-ext-installed="">    
+    
+    <span itemscope="" itemtype="http://schema.org/Organization">
+        <link itemprop="url" href="http://pawinhand.kr/">
+        <a itemprop="sameAs" href="https://www.instagram.com/pawinhand_official"></a>
+        <a itemprop="sameAs" href="https://smartstore.naver.com/pawinhand"></a>
+        <a itemprop="sameAs" href="https://blog.naver.com/pawinhand"></a>
+        <a itemprop="sameAs" href="https://www.facebook.com/pawinhand"></a>
+        <a itemprop="sameAs" href="https://twitter.com/PAWINHAND_"></a>
+    </span>
+    
+    <div id="wrap" class="wrapper">
+
+        <div id="header_warp">
+            <div id="header">
+                <!-- 헤더 : 공통 -->
+                <header class="header">
+                    <h1 class="logo">
+                        <a href="https://pawinhand.kr/index.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="223" height="61"><g class="logoEle" fill="#F29700" fill-rule="evenodd"><path d="M82.59 22.5H75v15.86h3.49v-6h4.1c2.61.04 5.61-1.17 5.61-4.86 0-3.69-3-5-5.61-5zm-.15 6.86h-3.95V25.5h4a2 2 0 012.13 1.94 1.998 1.998 0 01-2.18 1.919zm43.24-6.86h-3.54l-2.66 10.44h-.05l-3.29-10.44h-3.25l-3.32 10.18h-.04L107 22.5h-3.81l4.7 15.86h3.01l3.49-10.97h.04l3.5 10.97h3.11zm2.63 0h3.5v15.86h-3.5zm29.33 9.48h7.51v6.38h3.49V22.5h-3.49v6.39h-7.51V22.5h-3.5v15.86h3.5zm-10.65 1.12l-7.7-10.6h-3.84v15.87h3.5V27.78l7.7 10.59h3.83V22.5h-3.49zm30.07-10.6l-7 15.86h3.83l.89-2.34h7.35l.89 2.34h3.83L180 22.5h-2.94zm4 10.54H176l2.55-6.73 2.51 6.73zm-81.6 2.98l.88 2.34h3.83L97.23 22.5h-2.89l-6.95 15.86h3.83l.88-2.34h7.36zm-3.68-9.7l2.55 6.72h-5.1l2.55-6.72zm117.37-3.82h-5.45v15.87h5.45c4.19 0 9-1.93 9-7.93s-4.81-7.94-9-7.94zm.34 12.67h-2.3v-9.45h2.3c2.17 0 5.2 1.15 5.2 4.73 0 3.58-3.03 4.72-5.2 4.72zm-13.28 3.2h3.83V22.5h-3.49v10.6l-7.71-10.6h-3.83v15.87h3.49V27.78z" fill-rule="nonzero"></path><path d="M11.792 49.84c-.381-.843.972-2.39 2.313-3.184 1.745-1.035 3.682-2.04 5.533-3.016 1.852-.975 4.41-2.314 5.898-2.976 1.807-.803 3.225-.256 4.464.5.623.38.622 1.15 0 1.549-.994.638-3.808 2.256-6.445 3.575-2.636 1.319-5.536 2.704-7.778 3.617-2.243.913-3.64.689-3.985-.065m-4.256-4.684c-1.097-2.267 6.781-5.325 12.613-8.185 1.495-.734 4.018.071 4.397 1.132.368 1.03-2.037 2.063-3.558 2.786-1.5.712-6.318 2.995-8.7 4.01-1.971.842-4.186 1.428-4.752.257m6.175-10.93c2.549-1.059 4.396-.175 4.879.247.379.33 1.02 1.03-.877 1.896-5.016 2.29-10.365 5.06-11.33 3.36-.804-1.418 2.105-3.333 7.328-5.503m45.584-.013c-.461-.27-1.081-.105-1.84.496-.509.405-.982.789-1.435 1.158-1.834 1.488-3.412 2.77-6.076 4.31-4.02 2.322-9.751 4.697-13.708 6.319-1.222.499-2.861 1.28-4.76 2.185-2.255 1.075-4.81 2.291-7.331 3.353-2.246.944-3.336.727-3.61.21-.386-.736.19-1.669 1.338-2.392.884-.555 2.476-1.449 4.16-2.397 1.545-.869 11.781-6.677 11.845-6.716a16.995 16.995 0 003.246-2.584c.249-.252.5-.502.732-.77a14.268 14.268 0 001.55-2.171c.61-1.047 1.063-2.136 1.217-3.224.229-1.588-.199-3.106-1.268-4.512-2.032-2.67-8.382-5.29-10.947-6.025-2.563-.734-7.394-2.604-8.356-2.954-1.669-.607-2.75-1.623-3.064-2.924-.38-1.57-.023-2.476 3.112-1.692 4.477 1.12 14.332 3.097 19 5.25 6.635 3.057 7.384 2.395 9.573 1.706l.115-.037c2.758-.865 4.096-1.662 4.474-2.666.378-1.002-.219-2.106-1.04-3.442 0-.003-.003-.007-.005-.01A30.63 30.63 0 0028.991.02 30.547 30.547 0 004.226 14.27c-.017.026-1.628 2.566.064 4.243 0 0 2.485 2.958 18.015 3.748 1.076.06 2.129.119 3.133.183 2.192.142 4.063.382 5.938.85.941.265 1.86.554 2.746.869 3.366 1.197 6.205 2.74 7.586 4.554.446.586.707 1.178.825 1.783.021.107.047.215.058.323.028.289.032.58-.011.878-.041.285-.15.576-.244.867a2.034 2.034 0 00-.147-.498c-.825-1.596-2.216-2.63-2.656-2.658-.273-.017-.444.078-.565.285a.664.664 0 00.234.913c.018.011 1.66 1.011 2.168 2.511.153.495.192.86.18 1.18-.024.588-.287.98-.829 1.393-.014-.045-.04-.088-.054-.133a3.66 3.66 0 00-.653-1.16c-1.213-1.44-2.381-1.913-2.432-1.93a.669.669 0 00-.498 1.24c.01 0 .922.384 1.901 1.547.366.436.548.875.549 1.334-.015.053-.036.17-.07.31a2.419 2.419 0 01-.633 1.147c-.457.482-1.215.675-1.646.712-.012 0-.028.005-.039.006-1.175-2.334-2.688-2.728-2.872-2.765a.664.664 0 00-.78.51.672.672 0 00.5.795c.05.012 1.109.316 2 2.148.004.01.01.016.014.026-.02.077-.064.415-.557.642-.413.19-.842.28-1.288.31-1.136.075-2.42-.348-4.112-1.316-1.077-.616-2.15-1.342-3.287-2.108-2.047-1.382-4.365-2.948-7.184-4.157-3.616-1.552-5.83-1.426-9.043-1.187-3.213.24-6.358 1.02-9.478 1.812-.296.12-.538.31-.714.577-.554.834-.277 2.068-.266 2.112 1.337 7.099 5.193 13.52 10.854 18.08a30.572 30.572 0 0020.271 6.734c13.803-.495 25.593-10.218 28.667-23.624l.04-.124.005-.017.006-.034c.137-.833.18-2.495-.627-2.968"></path></g></svg>
+                        </a>
+                    </h1>
+                    <div class="inner">
+                        <p class="contactInfo">Contact Us<strong>pawinhand@naver.com</strong></p>
+                    </div>
+                    <button type="button" class="btn-open-gnb">MENU</button>
+                </header>
+
+                <!-- 전체메뉴 : 공통 -->
+                <div class="menuAnimationLayer open" style="transform: matrix(1, 0, 0, 1, 0, 0);"></div>
+
+                <div class="menuLayer" style="visibility: hidden; opacity: 0; display: none; transform: matrix(1, 0, 0, 1, 0, -10);">
+                    <div class="inner">
+                        <nav class="menu">
+                            <ul>
+                                <li><a href="https://pawinhand.kr/service/about.html">포인핸드 소개</a></li>
+                                <li><a href="https://pawinhand.kr/service/activities.html">포인핸드 활동</a></li>
+                                <li><a href="https://smartstore.naver.com/pawinhand" target="_blank">포인핸드 스토어</a></li>
+                                <li><a href="https://pawinhand.kr/service/statistics.html">유기동물 통계</a></li>
+                                <li><a href="https://pawinhand.kr/service/review.html">입양후기</a></li>
+                                <li><a href="https://pawinhand.kr/service/sponsorship.html">포인핸드 후원</a></li>
+                                <!--<li><a href="/board/list.php?&amp;bdId=notice">공지사항</a></li>-->
+                                <!--<li><a href="/board/list.php?&bdId=qna">Q&amp;A</a></li>메뉴숨김-->
+                            </ul>
+                        </nav>
+                        <div class="links">
+                            <a href="https://appsto.re/kr/oDrX8.i" target="_blank" title="애플 앱스토어"><img src="./pawinhand-og_files/ico-link-apple.png" alt="앱스토어"></a>
+                            <a href="https://play.google.com/store/apps/details?id=lost.animal.main" target="_blank" title="구글 플레이스토어"><img src="./pawinhand-og_files/ico-link-playStore.png" alt="구글플레이스토어"></a>
+                            <a href="https://www.instagram.com/pawinhand_official/?hl=ko" target="_blank" title="인스타그램"><img src="./pawinhand-og_files/ico-link-insta.png" alt="인스타그램"></a>
+                        </div>
+                        <footer class="footer">
+                            <div class="contactInfo">
+                                <p><img src="./pawinhand-og_files/ico-contact-phone.png" alt="">02-6956-6242</p>
+                                <p><img src="./pawinhand-og_files/ico-contact-email.png" alt="">pawinhand@naver.com</p>
+                            </div>
+                            <!--<div class="link_terms">
+                                    <a href="/service/agreement.php">이용약관</a>
+                                    <a href="/service/private.php">개인정보취급방침</a>
+                                </div>-->
+                            <p class="addr">주식회사 포인핸드 ㅣ 대표자 : 이환희 <br>사업자번호 : 322-87-00895 ㅣ 사업장 주소 : 서울특별시 마포구 대흥로 67 (정신빌딩) 401호</p>
+                            <div class="copyright">
+                                <p>©포인핸드 제공/데이터 출처 <strong>농림축산식품부</strong> ㅣ Website made by <a href="http://hummman.com/" target="_blank">hummman.com</a></p>
+                                <p>©Pawinhandteam all right reserved.</p>
+                            </div>
+                        </footer>
+                        <button type="button" class="btn-close-gnb"><img src="./pawinhand-og_files/img-close-gnb.png" alt="닫기"></button>
+                    </div>
+                </div>
+            </div>
+            <!-- //header -->
+        </div>
+        <!-- //header_warp -->
+
+        <div id="container">
+            <div id="contents">
+            <!-- 본문 시작 -->
+                <div class="sub_content">
+
+                    
+
+
+
+
+<script type="text/javascript" src="./pawinhand-og_files/pawinhand_home.js"></script>
+<script type="text/javascript" src="./pawinhand-og_files/owl.carousel.min.js"></script>
+
+<div class="main">
+	<div class="mainContents">
+		<div class="page section01 active_scene">
+			<div class="innerCont bgLayer">
+				<div class="cover"></div>
+				<div class="inner">
+					<h2>Adopt Animals<br>Adopt Family</h2>
+					<p>포인핸드는 사지 않고 입양하는 문화를 만듭니다.</p>
+					<span class="scrollGuide">Scroll Down <img src="./pawinhand-og_files/ico-scrollDown2.png" alt=""></span>
+				</div>
+			</div>
+			<div class="innerCont maskLayer" style="--mask-size:53.434423200445494px; --mask-x:824.9747890282246px; --mask-y:366.44063999039076px;">
+				<div class="inner">
+					<h2>Adopt Animals<br>Adopt Family</h2>
+					<p>포인핸드는 사지 않고 입양하는 문화를 만듭니다.</p>
+					<span class="scrollGuide">Scroll Down <img src="./pawinhand-og_files/ico-scrollDown2_hover.png" alt=""></span>
+				</div>
+			</div>
+			<div class="hoverLayer"></div>
+		</div>
+
+		<div class="page section02">
+			<div class="innerCont bgLayer">
+				<div class="cover"></div>
+				<div class="inner">
+					<p>포인핸드를 통해<span><strong class="aniCount">68,724</strong>마리의</span>유기동물이 가족을 찾았습니다.</p>
+					<a href="https://pawinhand.kr/service/about.html" class="main-link">포인핸드 소개</a>
+					<span class="scrollGuide"><img src="./pawinhand-og_files/ico-scrollDown.png" alt=""></span>
+				</div>
+			</div>
+			<div class="innerCont maskLayer" style="--mask-size:53.434423200445494px; --mask-x:824.9747890282246px; --mask-y:366.44063999039076px;">
+				<div class="inner">
+					<p>포인핸드를 통해<span><strong class="aniCount">68,724</strong>마리의</span>유기동물이 가족을 찾았습니다.</p>
+					<a href="https://pawinhand.kr/service/about.html" class="main-link">포인핸드 소개</a>
+					<span class="scrollGuide"><img src="./pawinhand-og_files/ico-scrollDown_hover.png" alt=""></span>
+				</div>
+			</div>
+			<!-- <div class="hoverLayer"></div> -->
+		</div>
+
+		<div class="page section03">
+			<div class="innerCont bgLayer">
+				<div class="top">
+					<p class="main-tit-txt">포인핸드에서는<br>어떤 일들을 하나요?</p>
+					<a href="https://pawinhand.kr/service/activities.html" class="main-link">전체 캠페인 보기</a>
+				</div>
+				<div class="campaigns">
+					<div class="campaign01">
+						<strong>유기동물<br>입양 플랫폼</strong>
+					</div>
+					<div class="campaign02">
+						<strong>유기동물<br>건강검진 지원</strong>
+					</div>
+					<div class="campaign03">
+						<strong>포인핸드<br>매거진</strong>
+					</div>
+				</div>
+			</div>
+			<div class="innerCont maskLayer" style="--mask-size:53.434423200445494px; --mask-x:824.9747890282246px; --mask-y:366.44063999039076px;">
+				<div class="top">
+					<p class="main-tit-txt">포인핸드에서는<br>어떤 일들을 하나요?</p>
+					<a href="https://pawinhand.kr/service/activities.html" class="main-link">전체 캠페인 보기</a>
+				</div>
+				<div class="campaigns">
+					<div class="campaign01">
+						<strong>유기동물<br>입양 플랫폼</strong>
+						<p><span>전국 보호소의 유기동물을</span><br><span>입양할 수 있는 플랫폼</span></p>
+					</div>
+					<div class="campaign02">
+						<strong>유기동물<br>건강검진 지원</strong>
+						<p><span>입양된 유기동물들의</span><br><span>건강검진을 지원합니다</span></p>
+					</div>
+					<div class="campaign03">
+						<strong>포인핸드<br>매거진</strong>
+						<p><span>입양하는 문화를</span><br><span>만드는 매거진</span></p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="page centerBox section04">
+			<div class="innerCont bgLayer">
+				<div class="inner">
+					<p class="main-tit-txt">유기동물과 함께 나누는<br>포인핸드 스토어</p>
+					<a href="https://smartstore.naver.com/pawinhand" class="main-link" target="_blank">포인핸드 스토어</a>
+					<div class="main-product-list">
+						<div class="main-product-list">
+						
+							<ul>	
+								<li>
+									<a href="https://smartstore.naver.com/pawinhand/products/7197877706">
+										<div class="thumbBox">
+											<img src="./pawinhand-og_files/adopt_me_doll.jpg" width="250" alt="어답미 인형" title="어답미 인형" class="middle">
+										&nbsp;</div>
+										<div class="desc">
+											<strong class="name">어답미 인형</strong>
+											<div>
+												<!--<span class="price cancel"><strong>31,000</strong>원</span>-->
+												<span class="price"><strong>31,000</strong>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li>
+									<a href="https://smartstore.naver.com/pawinhand/products/7058795362">
+										<div class="thumbBox">
+											<img src="./pawinhand-og_files/rainbow_badge.jpg" width="250" alt="무지개다리 뱃지" title="무지개다리 뱃지" class="middle">
+										&nbsp;</div>
+										<div class="desc">
+											<strong class="name">무지개다리 뱃지</strong>
+											<div>
+												<span class="price cancel"><strong>10,000</strong>원</span>
+												<span class="price"><strong>7,000</strong>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li>
+									<a href="https://m.smartstore.naver.com/pawinhand/products/6687885388">
+										<div class="thumbBox">
+											<img src="./pawinhand-og_files/65576554504863579_353292006.jpg" width="250" alt="믹스패밀리 리유저블컵" title="믹스패밀리 리유저블컵" class="middle">
+										&nbsp;</div>
+										<div class="desc">
+											<strong class="name">믹스패밀리 리유저블컵</strong>
+											<div>
+												<span class="price"><strong>18,000</strong>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li>
+									<a href="https://smartstore.naver.com/pawinhand/products/4754400118">
+										<div class="thumbBox">
+											<img src="./pawinhand-og_files/magazine_subscribe.jpeg" width="250" alt="매거진 정기구독" title="매거진 정기구독" class="middle">
+										&nbsp;</div>
+										<div class="desc">
+											<strong class="name">매거진 정기구독</strong>
+											<div>
+												
+												<span class="price"><strong>36,000</strong>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li>
+									<a href="https://smartstore.naver.com/pawinhand/products/5734485957">
+										<div class="thumbBox">
+											<img src="./pawinhand-og_files/logo_symbol_badge.jpg" width="250" alt="로고 뱃지" title="로고 뱃지" class="middle">
+										&nbsp;</div>
+										<div class="desc">
+											<strong class="name">로고 뱃지</strong>
+											<div>
+												<span class="price cancel"><strong>10,000</strong>원</span>
+												<span class="price"><strong>7,000</strong>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li>
+									<a href="https://smartstore.naver.com/pawinhand/products/5256665052">
+										<div class="thumbBox">
+											<img src="./pawinhand-og_files/h_harness.jpg" width="250" alt="H형 하네스 가슴줄" title="H형 하네스 가슴줄" class="middle">
+										&nbsp;</div>
+										<div class="desc">
+											<strong class="name">H형 하네스 가슴줄</strong>
+											<div>
+												<span class="price cancel"><strong>10,000</strong>원</span>
+												<span class="price"><strong>8,000</strong>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<p class="main-donation-info">누적후원 금액<span><strong class="data-donation donCount">0</strong>원</span></p>
+				</div>
+			</div>
+			<div class="innerCont maskLayer" style="--mask-size:53.434423200445494px; --mask-x:824.9747890282246px; --mask-y:366.44063999039076px;">
+				<div class="inner">
+					<p class="main-tit-txt">유기동물과 함께 나누는<br>포인핸드 스토어</p>
+					<a href="https://smartstore.naver.com/pawinhand" class="main-link" target="_blank">포인핸드 스토어</a>
+					<div class="main-product-list">
+						<div class="main-product-list">
+						
+							<ul>	
+								<li>
+									<a href="https://smartstore.naver.com/pawinhand/products/7197877706">
+										<div class="thumbBox">
+											<img src="./pawinhand-og_files/adopt_me_doll.jpg" width="250" alt="어답미 인형" title="어답미 인형" class="middle">
+										&nbsp;</div>
+										<div class="desc">
+											<strong class="name">어답미 인형</strong>
+											<div>
+												<!--<span class="price cancel"><strong>31,000</strong>원</span>-->
+												<span class="price"><strong>31,000</strong>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li>
+									<a href="https://smartstore.naver.com/pawinhand/products/7058795362">
+										<div class="thumbBox">
+											<img src="./pawinhand-og_files/rainbow_badge.jpg" width="250" alt="무지개다리 뱃지" title="무지개다리 뱃지" class="middle">
+										&nbsp;</div>
+										<div class="desc">
+											<strong class="name">무지개다리 뱃지</strong>
+											<div>
+												<span class="price cancel"><strong>10,000</strong>원</span>
+												<span class="price"><strong>7,000</strong>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li>
+									<a href="https://m.smartstore.naver.com/pawinhand/products/6687885388">
+										<div class="thumbBox">
+											<img src="./pawinhand-og_files/65576554504863579_353292006.jpg" width="250" alt="믹스패밀리 리유저블컵" title="믹스패밀리 리유저블컵" class="middle">
+										&nbsp;</div>
+										<div class="desc">
+											<strong class="name">믹스패밀리 리유저블컵</strong>
+											<div>
+												<span class="price"><strong>18,000</strong>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li>
+									<a href="https://smartstore.naver.com/pawinhand/products/4754400118">
+										<div class="thumbBox">
+											<img src="./pawinhand-og_files/magazine_subscribe.jpeg" width="250" alt="매거진 정기구독" title="매거진 정기구독" class="middle">
+										&nbsp;</div>
+										<div class="desc">
+											<strong class="name">매거진 정기구독</strong>
+											<div>
+												
+												<span class="price"><strong>36,000</strong>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li>
+									<a href="https://smartstore.naver.com/pawinhand/products/5734485957">
+										<div class="thumbBox">
+											<img src="./pawinhand-og_files/logo_symbol_badge.jpg" width="250" alt="로고 뱃지" title="로고 뱃지" class="middle">
+										&nbsp;</div>
+										<div class="desc">
+											<strong class="name">로고 뱃지</strong>
+											<div>
+												<span class="price cancel"><strong>10,000</strong>원</span>
+												<span class="price"><strong>7,000</strong>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+								<li>
+									<a href="https://smartstore.naver.com/pawinhand/products/5256665052">
+										<div class="thumbBox">
+											<img src="./pawinhand-og_files/h_harness.jpg" width="250" alt="H형 하네스 가슴줄" title="H형 하네스 가슴줄" class="middle">
+										&nbsp;</div>
+										<div class="desc">
+											<strong class="name">H형 하네스 가슴줄</strong>
+											<div>
+												<span class="price cancel"><strong>10,000</strong>원</span>
+												<span class="price"><strong>8,000</strong>원</span>
+											</div>
+										</div>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<p class="main-donation-info">누적후원 금액<span><strong class="data-donation1 donCount">0</strong>원</span></p>
+				</div>
+			</div>
+		</div>
+
+		<div class="page centerBox section05">
+			<div class="innerCont bgLayer">
+				<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="73" viewBox="0 0 1600 73" class="bg_obj01"><path fill="none" stroke="#FFF" stroke-width="2" d="M-210 107l143.247-71.616c89.866-44.93 195.644-44.93 285.51 0l.492.246c89.866 44.93 195.643 44.93 285.51 0l.492-.246c89.866-44.93 195.643-44.93 285.51 0l.492.246c89.866 44.93 195.643 44.93 285.51 0 90.144-45.066 196.276-44.921 286.296.393l1.89.954c90.02 45.314 196.152 45.46 286.296.393L1794-34"></path></svg>
+				<div class="inner">
+					<p class="main-tit-txt">입양 후기를 만나보세요.</p>
+					<a href="https://pawinhand.kr/service/review.html" class="main-link">입양후기 보기</a>
+					<ul class="main-postscript-list main_review_list01" id="review_list01">
+						<!--
+						<li>
+								<div class="thumbBox"><img src="https://cafe24.poxo.com/ec01/pawinhand1/6aDrbsrpgztyixM+aENnH6HjH4TTykqgQt5HQjnLmP6XbyGTSvgS4FKKyxfnmmzX/swHIcSYFKQg3+gyk9qXzw==/_/img/pawinhand/review01.jpg" alt=""></div>
+								<div class="desc">
+									<strong>토리와 함께라서 행복해요</strong>
+									<p>토리를 입양한지 이제 한달이 조금 넘었습니다. 우연히 포인핸드 사이트를 알게되어…</p>
+								</div>
+						</li>
+						<li>
+								<div class="thumbBox"><img src="https://cafe24.poxo.com/ec01/pawinhand1/6aDrbsrpgztyixM+aENnH6HjH4TTykqgQt5HQjnLmP6XbyGTSvgS4FKKyxfnmmzX/swHIcSYFKQg3+gyk9qXzw==/_/img/pawinhand/review02.jpg" alt=""></div>
+								<div class="desc">
+									<strong>시루시루</strong>
+									<p>벌써 시루랑 가족이 된지 55일째 되는날이에요!!말도 잘 듣고 할 줄 아는것도 많은 똑쟁이…</p>
+								</div>
+						</li>
+						<li>
+								<div class="thumbBox"><img src="https://cafe24.poxo.com/ec01/pawinhand1/6aDrbsrpgztyixM+aENnH6HjH4TTykqgQt5HQjnLmP6XbyGTSvgS4FKKyxfnmmzX/swHIcSYFKQg3+gyk9qXzw==/_/img/pawinhand/review03.jpg" alt=""></div>
+								<div class="desc">
+									<strong>울집 막내동생 데려온지 2달째</strong>
+									<p>토리를 입양한지 이제 한달이 조금 넘었습니다. 우연히 포인핸드 사이트를 알게되어…</p>
+								</div>
+						</li>
+						<li>
+								<div class="thumbBox"><img src="https://cafe24.poxo.com/ec01/pawinhand1/6aDrbsrpgztyixM+aENnH6HjH4TTykqgQt5HQjnLmP6XbyGTSvgS4FKKyxfnmmzX/swHIcSYFKQg3+gyk9qXzw==/_/img/pawinhand/review04.jpg" alt=""></div>
+								<div class="desc">
+									<strong>꾸꾸가 나의 가족이 된지 3달째</strong>
+									<p>안녕하세요! 우리 꾸꾸가 제 가족이 된지 벌써 3달이…</p>
+								</div>
+						</li>
+						-->
+					<li><div class="thumbBox"><img src="./pawinhand-og_files/story_1734401101925.jpg" alt=""></div><div class="desc"><strong class="ellipsis">우리집 쫄보랑 눈썹이 </strong><p>(구 소담)현 쫄보는 당신 임보 전제로 (구 달달이) 현 눈썹이와 같이 왔다가 우리집에 그대로 정착해서 5.4kg 몸무게를 유지하며 잘지내는 중입니다. 
+
+이렇게 남집사의 침대를 둘이서 차지하고 늘어지게 잠만 잔답니다. 당시 포인핸드에서 공고를 보고 한 눈에 뿅 반해서 지금까지 함께하고 있어용 </p></div><div class="imgPath">story/2024-12-17/story_1734401101925.jpg,story/2024-12-17/story_1734401110157.jpg,story/2024-12-17/story_1734401135512.jpg</div></li><li><div class="thumbBox"><img src="./pawinhand-og_files/story_1734386381486.png" alt=""></div><div class="desc"><strong class="ellipsis">입양</strong><p>부산서 속초까지 왕복 힘들었지만 너무 귀여운 공주 데리고 와서 기쁘다. 아이들도 좋아하고 약간의 기관지염이 있어서 병원가서 가루약 먹이는데 힘들었지만 우리 집에서 잘먹고 똥도 잘싸고 오줌도 잘싼다. 내가 잠시 밖에 나가면 짖지만 돌아오면 꼬리 흔드는게 반갑다고 ㅋㅋㄱ </p></div><div class="imgPath">story/2024-12-17/story_1734386381486.png,story/2024-12-17/story_1734386387545.png,story/2024-12-17/story_1734386394922.png</div></li><li><div class="thumbBox"><img src="./pawinhand-og_files/story_1734365027771.png" alt=""></div><div class="desc"><strong class="ellipsis">똑똑하고 순한 겁쟁이 복돌이 ❤️</strong><p>키우고있는 애기랑 색만 다르고 너무 똑같아서 눈길이 갔어요. 겁도엄청많고 순하고 짠하더라구요. 집에서 하루이틀 적응기간 가지니 배변패드에 잘가리구 개인기도하고 너무기특하고 착해요 잘안겨있고ㅎㅎ이젠 배도 보여주면서 애교부려요</p></div><div class="imgPath">story/2024-12-17/story_1734365027771.png,story/2024-12-17/story_1734365032580.png,story/2024-12-17/story_1734365040616.png</div></li><li><div class="thumbBox"><img src="./pawinhand-og_files/story_1734364638628.jpg" alt=""></div><div class="desc"><strong class="ellipsis">🤍하콩아 생일 축하해🤍</strong><p>사랑하는 하콩이와 함께한지 1년이라는 시간이 지났어요!🩷
+보호소에서 나왔을때만 하더라도 손발에 착색도 심하고 얼마나 울었는지 눈물 자국도 심했는데 지금은 뽀용공주 강아지가 되었답니다! 
+하콩이를 입양한 후 함께하는 사계절이 너무 행복했어요🙌🏻
+앞으로도 오래오래 행복하게 살자 하콩아! 사랑해 생일축하해🎂🩷</p></div><div class="imgPath">story/2024-12-17/story_1734364638628.jpg,story/2024-12-17/story_1734364650672.jpg,story/2024-12-17/story_1734364666619.jpg</div></li></ul>
+				</div>
+			</div>
+			<div class="innerCont maskLayer" style="--mask-size:53.434423200445494px; --mask-x:824.9747890282246px; --mask-y:366.44063999039076px;">
+				<div class="inner">
+					<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="73" viewBox="0 0 1600 73" class="bg_obj01"><path fill="none" stroke="#FFF" stroke-width="2" d="M-210 107l143.247-71.616c89.866-44.93 195.644-44.93 285.51 0l.492.246c89.866 44.93 195.643 44.93 285.51 0l.492-.246c89.866-44.93 195.643-44.93 285.51 0l.492.246c89.866 44.93 195.643 44.93 285.51 0 90.144-45.066 196.276-44.921 286.296.393l1.89.954c90.02 45.314 196.152 45.46 286.296.393L1794-34"></path></svg>
+					<p class="main-tit-txt">입양 후기를 만나보세요.</p>
+					<a href="https://pawinhand.kr/service/review.html" class="main-link">입양후기 보기</a>
+					<ul class="main-postscript-list main_review_list02" id="review_list02">
+						<!--
+						<li>
+								<div class="thumbBox"><img src="https://cafe24.poxo.com/ec01/pawinhand1/6aDrbsrpgztyixM+aENnH6HjH4TTykqgQt5HQjnLmP6XbyGTSvgS4FKKyxfnmmzX/swHIcSYFKQg3+gyk9qXzw==/_/img/pawinhand/review01.jpg" alt=""></div>
+								<div class="desc">
+									<strong>토리와 함께라서 행복해요</strong>
+									<p>토리를 입양한지 이제 한달이 조금 넘었습니다. 우연히 포인핸드 사이트를 알게되어…</p>
+								</div>
+						</li>
+						<li>
+								<div class="thumbBox"><img src="https://cafe24.poxo.com/ec01/pawinhand1/6aDrbsrpgztyixM+aENnH6HjH4TTykqgQt5HQjnLmP6XbyGTSvgS4FKKyxfnmmzX/swHIcSYFKQg3+gyk9qXzw==/_/img/pawinhand/review02.jpg" alt=""></div>
+								<div class="desc">
+									<strong>시루시루</strong>
+									<p>벌써 시루랑 가족이 된지 55일째 되는날이에요!!말도 잘 듣고 할 줄 아는것도 많은 똑쟁이…</p>
+								</div>
+						</li>
+						<li>
+								<div class="thumbBox"><img src="https://cafe24.poxo.com/ec01/pawinhand1/6aDrbsrpgztyixM+aENnH6HjH4TTykqgQt5HQjnLmP6XbyGTSvgS4FKKyxfnmmzX/swHIcSYFKQg3+gyk9qXzw==/_/img/pawinhand/review03.jpg" alt=""></div>
+								<div class="desc">
+									<strong>울집 막내동생 데려온지 2달째</strong>
+									<p>토리를 입양한지 이제 한달이 조금 넘었습니다. 우연히 포인핸드 사이트를 알게되어…</p>
+								</div>
+						</li>
+						<li>
+								<div class="thumbBox"><img src="https://cafe24.poxo.com/ec01/pawinhand1/6aDrbsrpgztyixM+aENnH6HjH4TTykqgQt5HQjnLmP6XbyGTSvgS4FKKyxfnmmzX/swHIcSYFKQg3+gyk9qXzw==/_/img/pawinhand/review04.jpg" alt=""></div>
+								<div class="desc">
+									<strong>꾸꾸가 나의 가족이 된지 3달째</strong>
+									<p>안녕하세요! 우리 꾸꾸가 제 가족이 된지 벌써 3달이…</p>
+								</div>
+						</li>
+						-->
+					<li><div class="thumbBox"><img src="./pawinhand-og_files/story_1734401101925.jpg" alt=""></div><div class="desc"><strong class="ellipsis">우리집 쫄보랑 눈썹이 </strong><p>(구 소담)현 쫄보는 당신 임보 전제로 (구 달달이) 현 눈썹이와 같이 왔다가 우리집에 그대로 정착해서 5.4kg 몸무게를 유지하며 잘지내는 중입니다. 
+
+이렇게 남집사의 침대를 둘이서 차지하고 늘어지게 잠만 잔답니다. 당시 포인핸드에서 공고를 보고 한 눈에 뿅 반해서 지금까지 함께하고 있어용 </p></div><div class="imgPath">story/2024-12-17/story_1734401101925.jpg,story/2024-12-17/story_1734401110157.jpg,story/2024-12-17/story_1734401135512.jpg</div></li><li><div class="thumbBox"><img src="./pawinhand-og_files/story_1734386381486.png" alt=""></div><div class="desc"><strong class="ellipsis">입양</strong><p>부산서 속초까지 왕복 힘들었지만 너무 귀여운 공주 데리고 와서 기쁘다. 아이들도 좋아하고 약간의 기관지염이 있어서 병원가서 가루약 먹이는데 힘들었지만 우리 집에서 잘먹고 똥도 잘싸고 오줌도 잘싼다. 내가 잠시 밖에 나가면 짖지만 돌아오면 꼬리 흔드는게 반갑다고 ㅋㅋㄱ </p></div><div class="imgPath">story/2024-12-17/story_1734386381486.png,story/2024-12-17/story_1734386387545.png,story/2024-12-17/story_1734386394922.png</div></li><li><div class="thumbBox"><img src="./pawinhand-og_files/story_1734365027771.png" alt=""></div><div class="desc"><strong class="ellipsis">똑똑하고 순한 겁쟁이 복돌이 ❤️</strong><p>키우고있는 애기랑 색만 다르고 너무 똑같아서 눈길이 갔어요. 겁도엄청많고 순하고 짠하더라구요. 집에서 하루이틀 적응기간 가지니 배변패드에 잘가리구 개인기도하고 너무기특하고 착해요 잘안겨있고ㅎㅎ이젠 배도 보여주면서 애교부려요</p></div><div class="imgPath">story/2024-12-17/story_1734365027771.png,story/2024-12-17/story_1734365032580.png,story/2024-12-17/story_1734365040616.png</div></li><li><div class="thumbBox"><img src="./pawinhand-og_files/story_1734364638628.jpg" alt=""></div><div class="desc"><strong class="ellipsis">🤍하콩아 생일 축하해🤍</strong><p>사랑하는 하콩이와 함께한지 1년이라는 시간이 지났어요!🩷
+보호소에서 나왔을때만 하더라도 손발에 착색도 심하고 얼마나 울었는지 눈물 자국도 심했는데 지금은 뽀용공주 강아지가 되었답니다! 
+하콩이를 입양한 후 함께하는 사계절이 너무 행복했어요🙌🏻
+앞으로도 오래오래 행복하게 살자 하콩아! 사랑해 생일축하해🎂🩷</p></div><div class="imgPath">story/2024-12-17/story_1734364638628.jpg,story/2024-12-17/story_1734364650672.jpg,story/2024-12-17/story_1734364666619.jpg</div></li></ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="page centerBox section06">
+			<div class="innerCont bgLayer">
+				<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="73" viewBox="0 0 1600 73" class="bg_obj01"><path fill="none" stroke="#FFF" stroke-width="2" d="M-210 107l143.247-71.616c89.866-44.93 195.644-44.93 285.51 0l.492.246c89.866 44.93 195.643 44.93 285.51 0l.492-.246c89.866-44.93 195.643-44.93 285.51 0l.492.246c89.866 44.93 195.643 44.93 285.51 0 90.144-45.066 196.276-44.921 286.296.393l1.89.954c90.02 45.314 196.152 45.46 286.296.393L1794-34"></path></svg>
+				<div class="inner">
+					<p class="txt01"><a href="https://www.instagram.com/pawinhand_official/" target="_blank"><img src="./pawinhand-og_files/ico-main-insta.png" alt="">pawinhand_official</a></p>
+					<p class="txt02">포인핸드 인스타그램에서 다양한 소식을 확인하세요.</p>
+					<ul class="instaList">
+						<li><a href="https://www.instagram.com/pawinhand_official/" target="_blank"><img src="./pawinhand-og_files/review01.jpg" alt=""></a></li>
+						<li><a href="https://www.instagram.com/pawinhand_official/" target="_blank"><img src="./pawinhand-og_files/review02.jpg" alt=""></a></li>
+						<li><a href="https://www.instagram.com/pawinhand_official/" target="_blank"><img src="./pawinhand-og_files/review03.jpg" alt=""></a></li>
+						<li><a href="https://www.instagram.com/pawinhand_official/" target="_blank"><img src="./pawinhand-og_files/review04.jpg" alt=""></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="innerCont maskLayer" style="--mask-size:53.434423200445494px; --mask-x:824.9747890282246px; --mask-y:366.44063999039076px;">
+				<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="73" viewBox="0 0 1600 73" class="bg_obj01"><path fill="none" stroke="#FFF" stroke-width="2" d="M-210 107l143.247-71.616c89.866-44.93 195.644-44.93 285.51 0l.492.246c89.866 44.93 195.643 44.93 285.51 0l.492-.246c89.866-44.93 195.643-44.93 285.51 0l.492.246c89.866 44.93 195.643 44.93 285.51 0 90.144-45.066 196.276-44.921 286.296.393l1.89.954c90.02 45.314 196.152 45.46 286.296.393L1794-34"></path></svg>
+				<div class="inner">
+					<p class="txt01"><a href="https://www.instagram.com/pawinhand_official/" target="_blank"><img src="./pawinhand-og_files/ico-main-insta.png" alt="">pawinhand_official</a></p>
+					<p class="txt02">포인핸드 인스타그램에서 다양한 소식을 확인하세요.</p>
+					<ul class="instaList">
+						<li><a href="https://www.instagram.com/pawinhand_official/" target="_blank"><img src="./pawinhand-og_files/review01.jpg" alt=""></a></li>
+						<li><a href="https://www.instagram.com/pawinhand_official/" target="_blank"><img src="./pawinhand-og_files/review02.jpg" alt=""></a></li>
+						<li><a href="https://www.instagram.com/pawinhand_official/" target="_blank"><img src="./pawinhand-og_files/review03.jpg" alt=""></a></li>
+						<li><a href="https://www.instagram.com/pawinhand_official/" target="_blank"><img src="./pawinhand-og_files/review04.jpg" alt=""></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 메인 bottom -->
+	<div class="main_bottom">
+		<ul class="pawinhandInfo">
+			<li><img src="./pawinhand-og_files/ico-rescue.png" alt=""> 오늘 구조된 동물 <strong class="data-rescue">216</strong> 마리</li>
+			<li><img src="./pawinhand-og_files/ico-adoption.png" alt=""> 입양률 <strong class="data-adoptaion">23</strong> %</li>
+			<li><img src="./pawinhand-og_files/ico-euthanasia.png" alt=""> 안락사율 <strong class="data-euthanasis">18</strong> %</li>
+		</ul>
+		<div class="app_download">
+			<p>APP ON</p>
+			<a href="https://appsto.re/kr/oDrX8.i" target="_blank" title="애플 앱스토어"><img src="./pawinhand-og_files/ico-link-apple.png" alt="앱스토어"></a>
+			<a href="https://play.google.com/store/apps/details?id=lost.animal.main" target="_blank" title="구글 플레이스토어"><img src="./pawinhand-og_files/ico-link-playStore.png" alt="구글플레이스토어"></a>
+		</div>
+	</div>
+
+	<!-- goto top -->
+	<a href="https://pawinhand.kr/index.html#" class="main_gotoTop">TOP</a>
+
+	<!-- main scrollbar -->
+	<div class="mainScrollBar"><span class="thumb"></span></div>
+
+	<div class="page_cover"></div>
+</div>
+<!-- //메인 -->
+
+<!-- loading -->
+
+
+<!-- 입양후기 팝업 -->
+<div class="detailReview">
+	<div class="popupLoading"></div>
+	<div class="innerLayer">
+		<div class="owl-carousel"></div>
+		<div class="desc"></div>
+		<button type="button" class="close_reviewLayer"><img src="./pawinhand-og_files/img-close-gnb.png" alt=""></button>
+	</div>
+</div>
+
+
+                </div>
+            <!-- //contents -->
+        	</div>
+        <!-- container -->
+     	</div>
+  	</div>
+    <script type="text/javascript" src="./pawinhand-og_files/animation.gsap.min.js"></script>
+<span itemscope="" itemtype="https://schema.org/Organization">
+<link itemprop="url" href="https://pawinhand.kr/">
+</span>
+<script type="text/javascript" src="./pawinhand-og_files/cid.generate.js"></script>
+
+                <script>
+                try {
+                    // Account ID 적용
+                    if (!wcs_add) var wcs_add = {};
+                    wcs_add["wa"] = "s_2e02bb8b096";
+            
+                    // 네이버 페이 White list가 있을 경우
+                    wcs.checkoutWhitelist = ["pawinhand1.cafe24.com", "www.pawinhand1.cafe24.com", "m.pawinhand1.cafe24.com", "pawinhandmall.com", "www.pawinhandmall.com", "m.pawinhandmall.com", "pawinhand.kr", "www.pawinhand.kr", "m.pawinhand.kr"];
+                
+                    // 레퍼러 
+                    wcs.setReferer("https://github.com/");
+
+                    // 유입 추적 함수 호출
+                    wcs.inflow("pawinhand.kr");
+
+                    // 로그수집
+                    wcs_do();
+                } catch (e) {};
+                </script>
+            
+
+<!-- External Script Start -->
+
+<!-- kmp -->
+<!-- CMC3 script -->
+<div id="kmp_common_top_script" style="display:none;">
+<script type="text/javascript" charset="UTF-8" src="./pawinhand-og_files/kp.js"></script>
+<script type="text/javascript">
+  kakaoPixel('4581099611933983900').pageView();
+  kakaoPixel.setServiceOrigin('20001');
+</script>
+
+</div>
+<!-- CMC3 script -->
+ 
+<!-- External Script End -->
+
+<script type="text/javascript" src="./pawinhand-og_files/kakao.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="./pawinhand-og_files/i18n.php" charset="utf-8"></script>
+
+<script src="./pawinhand-og_files/optimizer(1).php"></script>
+<script type="text/javascript">
+var sIsChannelUi = 'F';
+var sChRef = '';
+var sUseShoppingpayPg = 'F';
+var sOwnMallLanding = 'F';
+var sShoppingPayCookie = '';
+var sYtshopping = 'F';
+if (sIsChannelUi === 'T') {
+sessionStorage.setItem('ch_ref', sChRef);
+}
+CAFE24.getChRefData = function() {
+if (sIsChannelUi === 'T') {
+return sessionStorage.getItem('ch_ref');
+}
+}
+// 자사몰랜딩/유튜브랜딩 공용
+CAFE24.checkChannelUI = function() {
+if ((sIsChannelUi === 'T' && sessionStorage.getItem('ch_ref') || (sUseShoppingpayPg === 'T' && sOwnMallLanding === 'T')) || sYtshopping === 'T') {
+return true;
+} else {
+return false;
+}
+}
+// 자사몰랜딩 UI확인
+CAFE24.isOwnMallLandingUI = function() {
+return sUseShoppingpayPg === 'T' && sOwnMallLanding === 'T';
+}
+CAFE24.attachShoppingpayParam = function(sUrl) {
+if (sUrl) {
+var sChRef = CAFE24.getChRefData();
+if (sChRef) {
+var sSeparator = (sUrl.includes('?')) ? '&' : '?';
+sUrl += sSeparator + 'ch_ref=' + sChRef;
+} else if (sUseShoppingpayPg === 'T' && sOwnMallLanding === 'T') {
+var sSeparator = (sUrl.includes('?')) ? '&' : '?';
+sUrl += sSeparator + 'co_servicetype=shoppingpay';
+}
+}
+return sUrl;
+}
+CAFE24.attachChRef = function(sUrl) {
+if (sUrl) {
+var sChRef = CAFE24.getChRefData();
+if (sChRef) {
+var sSeparator = (sUrl.includes('?')) ? '&' : '?';
+sUrl += sSeparator + 'ch_ref=' + sChRef;
+}
+}
+return sUrl;
+}
+var sIsCheckout = 'F';
+var sCheckoutToken = '';
+if (sIsCheckout === 'T') {
+sessionStorage.setItem('checkoutToken', sCheckoutToken);
+} else {
+sessionStorage.removeItem('checkoutToken');
+}
+CAFE24.getCheckoutToken = function() {
+if (sIsCheckout === 'T') {
+return sessionStorage.getItem('checkoutToken');
+}
+}
+CAFE24.attachCheckoutParam = function(sUrl) {
+if (sUrl) {
+var sCheckoutToken = CAFE24.getCheckoutToken();
+if (sCheckoutToken) {
+var sSeparator = (sUrl.includes('?')) ? '&' : '?';
+sUrl += sSeparator + 'checkoutToken=' + sCheckoutToken;
+}
+}
+return sUrl;
+}
+CAFE24.MOBILE_WEB = false; var mobileWeb = CAFE24.MOBILE_WEB;
+try {
+var isUseLoginKeepingSubmit = false;
+// isSeqNoKeyExpiretime
+function isSeqNoKeyExpiretime(iExpiretime)
+{
+var sDate = new Date();
+var iNow = Math.floor(sDate.getTime() / 1000);
+// 유효시간 확인
+if (iExpiretime > iNow) {
+return false;
+}
+return true;
+}
+function isUseLoginKeeping()
+{
+// 디바이스 확인
+if (EC_MOBILE_DEVICE === false) {
+return;
+}
+// 로그인 여부
+var isLogin = document.cookie.match(/(?:^| |;)iscache=F/) ? true : false
+if (isLogin) {
+return;
+}
+var sLoginKeepingInfo = localStorage.getItem('use_login_keeping_info');
+var iSeqnoExpiretime;
+var iSeqNoKey;
+if (sLoginKeepingInfo == null) {
+iSeqnoExpiretime = localStorage.getItem('seq_no_key_expiretime');
+iSeqNoKey = localStorage.getItem('seq_no_key');
+// 유효시간, key 값 확인
+if (iSeqnoExpiretime === null || iSeqNoKey === null) {
+return;
+}
+} else {
+var oLoginKeepingInfo = JSON.parse(sLoginKeepingInfo);
+iSeqNoKey = oLoginKeepingInfo.seq_no_key;
+iSeqnoExpiretime = oLoginKeepingInfo.seq_no_key_expiretime;
+if (isNaN(iSeqNoKey) === true || isNaN(iSeqnoExpiretime) === true) {
+return;
+}
+}
+if (isSeqNoKeyExpiretime(iSeqnoExpiretime) === false) {
+return;
+}
+useLoginKeepingSubmit();
+}
+function findGetParamValue(paramKey)
+{
+var result = null,
+tmp = [];
+location.search.substr(1).split('&').forEach(function (item) {
+tmp = item.split('=');
+if (tmp[0] === paramKey) result = decodeURIComponent(tmp[1]);
+});
+return result;
+}
+function useLoginKeepingSubmit()
+{
+var iSeqnoExpiretime;
+var iSeqNoKey;
+var sUseLoginKeepingIp;
+var sLoginKeepingInfo = localStorage.getItem('use_login_keeping_info');
+if (sLoginKeepingInfo == null) {
+iSeqnoExpiretime = localStorage.getItem('seq_no_key_expiretime');
+iSeqNoKey = localStorage.getItem('seq_no_key');
+} else {
+var oLoginKeepingInfo = JSON.parse(sLoginKeepingInfo);
+iSeqNoKey = oLoginKeepingInfo.seq_no_key;
+iSeqnoExpiretime = oLoginKeepingInfo.seq_no_key_expiretime;
+sUseLoginKeepingIp = oLoginKeepingInfo.use_login_keeping_ip;
+}
+var oForm = document.createElement('form');
+oForm.method = 'post';
+oForm.action = '/exec/front/member/LoginKeeping';
+document.body.appendChild(oForm);
+var oSeqNoObj = document.createElement('input');
+oSeqNoObj.name = 'seq_no_key';
+oSeqNoObj.type = 'hidden';
+oSeqNoObj.value = iSeqNoKey;
+oForm.appendChild(oSeqNoObj);
+oSeqNoObj = document.createElement('input');
+oSeqNoObj.name = 'seq_no_key_expiretime';
+oSeqNoObj.type = 'hidden';
+oSeqNoObj.value = iSeqnoExpiretime;
+oForm.appendChild(oSeqNoObj);
+var returnUrl = findGetParamValue('returnUrl');
+if (returnUrl == '' || returnUrl == null) {
+returnUrl = location.pathname + location.search;
+}
+oSeqNoObj = document.createElement('input');
+oSeqNoObj.name = 'returnUrl';
+oSeqNoObj.type = 'hidden';
+oSeqNoObj.value = returnUrl;
+oForm.appendChild(oSeqNoObj);
+if (sUseLoginKeepingIp != undefined) {
+oSeqNoObj = document.createElement('input');
+oSeqNoObj.name = 'use_login_keeping_ip';
+oSeqNoObj.type = 'hidden';
+oSeqNoObj.value = sUseLoginKeepingIp;
+oForm.appendChild(oSeqNoObj);
+}
+oForm.submit();
+isUseLoginKeepingSubmit = true;
+}
+isUseLoginKeeping();
+} catch(e) {
+}
+var aPopupListData = {"aPopupList":"[{\"type\":\"L\",\"child_type\":\"W\",\"idx\":11,\"file\":\"\\\/popup\\\/popup_11.html\",\"size\":\"450*475\",\"position\":\"150*400\",\"title\":\"\\ud3ec\\uc778\\ud578\\ub4dc 2024 \\uce98\\ub9b0\\ub354\",\"open\":false}]","aPopupCouponList":[],"sIsAuthGuidePopup":"","sIsUpdateEventGuidePopup":"","sIsLifetimeEventGuidePopup":"","sPopupPage":"F"};
+var aLogData = {"log_server1":"eclog2-260.cafe24.com","log_server2":"elg-db-svcm-199.cafe24.com","mid":"pawinhand1","stype":"e","domain":"","shop_no":"1","lang":"ko_KR","ver":2,"hash":"7ea8b3db6330a61da46df95bcb94daad","ca":"cfa-js.cafe24.com\/cfa.js","etc":"","mobile_flag":"F"};
+var sMileageName = '적립금';
+var sMileageUnit = '[:PRICE:]원';
+var sDepositName = '예치금';
+var sDepositUnit = '원';
+CAFE24.SHOP_CURRENCY_INFO = {"1":{"aShopCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"aShopSubCurrencyInfo":null,"aBaseCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"fExchangeRate":1,"fExchangeSubRate":null,"aFrontCurrencyFormat":{"head":"","tail":"\uc6d0"},"aFrontSubCurrencyFormat":{"head":"","tail":""}}}; var SHOP_CURRENCY_INFO = CAFE24.SHOP_CURRENCY_INFO;
+var EC_ASYNC_LIVELINKON_ID = '';
+CAFE24.APPSCRIPT_ASSIGN_DATA = CAFE24.APPSCRIPT_ASSIGN_DATA || [{'src':'https://app4you.cafe24.com/SmartPopup/tunnel/scriptTags?vs=20211102143318.1&client_id=AyPifbe9TEq8i4fmvfUgaZ', 'integrity': 'sha384-j+WLOriOo0/sb+Ho5fn6lGPknv0cW+wMxOLlx8qpy01ShkkynynGNJQ53niqAdze'},{'src':'https://cax.channel.io/cafe24/plugins/f2c97246-c5d1-4b93-aa8b-8db1f6bf8350.js?vs=20211229170230.1&client_id=QKWiDNLcK9koJO0swpfnuE'}];
+CAFE24.APPSCRIPT_SDK_DATA = CAFE24.APPSCRIPT_SDK_DATA || ['order','store','supply','application','category','collection','customer','personal','privacy','product','promotion'];
+var EC_APPSCRIPT_ASSIGN_DATA = CAFE24.getDeprecatedNamespace('EC_APPSCRIPT_ASSIGN_DATA');
+var EC_APPSCRIPT_SDK_DATA = CAFE24.getDeprecatedNamespace('EC_APPSCRIPT_SDK_DATA');
+</script>
+    
+<iframe src="./pawinhand-og_files/saved_resource.html" id="log_realtime" style="display: none;"></iframe><script src="./pawinhand-og_files/f2c97246-c5d1-4b93-aa8b-8db1f6bf8350.js"></script><script src="./pawinhand-og_files/scriptTags" integrity="sha384-j+WLOriOo0/sb+Ho5fn6lGPknv0cW+wMxOLlx8qpy01ShkkynynGNJQ53niqAdze" crossorigin="anonymous"></script><div id="ch-plugin" class="notranslate" style="z-index: 10000000 !important;">      <div id="ch-plugin-entry"><div style="display: block !important;"><template shadowrootmode="open"><div id="ch-shadow-root-wrapper"><style data-styled="active" data-styled-version="5.3.9"></style><svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="display: none;"><defs><mask id="ch-icons-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="30" height="30" style="mask-type: alpha;"><rect width="30" height="30" fill="url(#ch-icons-gradient)"></rect></mask><lineargradient id="ch-icons-gradient" x1="15" y1="15" x2="15" y2="30" gradientUnits="userSpaceOnUse"><stop></stop><stop offset="1" stop-opacity="0.8"></stop></lineargradient></defs><symbol id="channel-filled" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M27.4962 15.0038C27.4962 16.7173 27.1512 18.3464 26.5264 19.8336V19.8375C26.1392 20.7613 26.0702 21.7886 26.3117 22.7622L26.9902 25.4799C27.2202 26.3922 26.3922 27.224 25.4761 26.994L22.7584 26.3155C21.7847 26.0741 20.7574 26.1431 19.8336 26.5302C18.3464 27.155 16.7173 27.5 15.0038 27.5C8.12328 27.5 2.5 21.8844 2.5 15.0038C2.49617 8.09644 8.09645 2.5 15.0038 2.5C21.8844 2.5 27.4962 8.12328 27.4962 15.0038ZM22.3287 17.5655C20.9219 20.1759 18.1621 21.9468 14.992 21.9468H14.9844C11.8143 21.9468 9.05442 20.172 7.64765 17.5655C7.49049 17.2741 7.59782 16.91 7.88147 16.7375L10.12 15.3959C10.4382 15.2081 10.8369 15.3346 11.0055 15.6604C11.7492 17.1055 13.2518 18.0944 14.9882 18.0944C16.7246 18.0944 18.2272 17.1055 18.9709 15.6604C19.1395 15.3346 19.542 15.2081 19.8563 15.3959L22.0949 16.7375C22.3824 16.91 22.4859 17.2741 22.3287 17.5655Z" fill="currentcolor"></path></symbol><symbol id="channel" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M26.4162 21.5593L27.0194 23.9758C27.2341 24.8347 26.9887 25.7243 26.3616 26.3514C25.7345 26.9785 24.8483 27.2239 23.986 27.0092L21.5695 26.4059C20.9901 26.2594 20.38 26.3037 19.8449 26.5286C18.3112 27.1728 16.6854 27.5 15.0119 27.5H15.0051C11.6786 27.5 8.54294 26.198 6.17416 23.836C3.80539 21.4707 2.50341 18.335 2.5 15.0051C2.5 11.665 3.79857 8.52249 6.16053 6.16053C8.52249 3.79857 11.6616 2.5 15.0017 2.5H15.0051C18.335 2.5 21.4707 3.80538 23.8361 6.17416C26.2014 8.54294 27.5034 11.6786 27.5 15.0085C27.5 16.682 27.1728 18.3078 26.5286 19.8415C26.3037 20.3766 26.2594 20.9867 26.4059 21.5661L26.4162 21.5593ZM15.0071 5.26903H15.0037C12.4066 5.26903 9.96281 6.2813 8.12914 8.11838C6.29206 9.95547 5.27979 12.3992 5.27979 14.9964C5.27979 17.5833 6.29546 20.0236 8.13936 21.8641C9.98326 23.7046 12.4202 24.7237 15.0105 24.7169C16.3125 24.7169 17.577 24.4613 18.7665 23.9636C19.8503 23.5069 21.0841 23.4183 22.2396 23.7046L23.7597 24.0829C23.9642 24.1341 24.1482 23.95 24.0971 23.7455L23.7188 22.2254C23.4291 21.07 23.5211 19.8362 23.9744 18.7523C24.4754 17.5628 24.7276 16.2983 24.7276 14.9964C24.7276 12.4095 23.7154 9.9691 21.8749 8.1252C20.0344 6.2813 17.594 5.26903 15.0071 5.26562V5.26903ZM15.0002 20.9713C17.7405 20.9713 20.1195 19.4409 21.3295 17.1846H21.3226C21.4624 16.9222 21.3704 16.5984 21.1181 16.445L19.3288 15.3714C19.0493 15.2044 18.6914 15.3101 18.5449 15.5998C17.8871 16.8915 16.5476 17.7777 14.9968 17.7777C13.4494 17.7777 12.1066 16.8915 11.4488 15.5998C11.3022 15.3101 10.9443 15.2044 10.6648 15.3714L8.87548 16.445C8.62326 16.5984 8.53124 16.9222 8.67098 17.1846C9.88093 19.4375 12.2633 20.9713 15.0002 20.9713Z" fill="currentcolor"></path></symbol><symbol id="chat-bubble-alt-filled" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" d="M15 25C21.5584 25 26.875 20.5228 26.875 15C26.875 9.47715 21.5584 5 15 5C8.44162 5 3.125 9.47715 3.125 15C3.125 18.3766 5.11232 21.3623 8.15573 23.173C7.80844 24.4336 7.21229 25.6043 6.72761 26.4277C6.45154 26.8966 6.82131 27.4836 7.34888 27.3502C8.6738 27.015 10.7198 26.29 12.4901 24.7762C13.2992 24.9228 14.1389 25 15 25Z" fill="currentcolor"></path></symbol><symbol id="chat-bubble-alt" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M15 3.75C7.96117 3.75 1.875 8.59411 1.875 15C1.875 18.5603 3.78885 21.6689 6.66906 23.6979C6.36904 24.49 5.98744 25.221 5.65041 25.7935C5.26104 26.4549 5.31755 27.2305 5.69195 27.8008C6.08079 28.3931 6.82826 28.7712 7.65541 28.562C8.97104 28.2292 10.9899 27.531 12.8437 26.0991C13.546 26.1984 14.2664 26.25 15 26.25C22.0388 26.25 28.125 21.4059 28.125 15C28.125 8.59411 22.0388 3.75 15 3.75ZM4.375 15C4.375 10.3602 8.92207 6.25 15 6.25C21.0779 6.25 25.625 10.3602 25.625 15C25.625 19.6398 21.0779 23.75 15 23.75C14.2136 23.75 13.4485 23.6795 12.713 23.5462L12.1289 23.4404L11.6777 23.8262C10.669 24.6887 9.54739 25.2699 8.54952 25.6573C8.85534 25.0093 9.1482 24.2768 9.36084 23.505L9.61398 22.586L8.79485 22.0987C6.05428 20.4682 4.375 17.8541 4.375 15Z" fill="currentcolor"></path></symbol><symbol id="chat-bubble-filled" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M25.9044 22.7375C25.6969 22.1175 25.7206 21.43 26.0281 20.8538C27.3269 18.4175 27.8519 15.5113 27.2344 12.4425C26.2281 7.44255 22.1169 3.4863 17.0806 2.6713C8.54688 1.2913 1.27938 8.56005 2.66188 17.0938C3.47813 22.1288 7.43313 26.2388 12.4344 27.245C15.5044 27.8625 18.4119 27.335 20.8481 26.0363C21.4219 25.73 22.1019 25.7063 22.7181 25.9113C23.3894 26.135 24.2869 26.4338 25.1219 26.7125C26.0994 27.0375 27.0281 26.1075 26.7019 25.1313L25.9044 22.7375Z" fill="currentColor"></path></symbol><symbol id="chat-lightning-filled" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M25.9039 22.7375C25.6964 22.1175 25.7201 21.43 26.0276 20.8538C27.3264 18.4175 27.8514 15.5113 27.2339 12.4425C26.2276 7.44255 22.1164 3.4863 17.0801 2.6713C8.54639 1.2913 1.27889 8.56005 2.66139 17.0938C3.47764 22.1288 7.43264 26.2388 12.4339 27.245C15.5039 27.8625 18.4114 27.335 20.8476 26.0363C21.4214 25.73 22.1014 25.7063 22.7176 25.9113C23.3889 26.135 24.2864 26.4338 25.1214 26.7125C26.0989 27.0375 27.0276 26.1075 26.7014 25.1313L25.9039 22.7375ZM19.9612 13.9188L16.7837 13.1838L18.3162 7.97382C18.4237 7.60757 17.9712 7.34007 17.7025 7.61007L10.1075 15.2263C9.90371 15.4313 10.0037 15.7788 10.285 15.8451L13.4625 16.5801L11.9312 21.7901C11.8237 22.1563 12.275 22.4238 12.5437 22.1538L20.1387 14.5376C20.3425 14.3326 20.2425 13.9851 19.9612 13.9188Z" fill="currentcolor"></path></symbol><symbol id="chat-progress-filled" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M26.0281 20.8538C25.7206 21.43 25.6969 22.1175 25.9044 22.7375L26.7019 25.1313C27.0281 26.1075 26.0994 27.0375 25.1219 26.7125C24.5488 26.5212 23.9462 26.3205 23.4076 26.141L22.7181 25.9113C22.1019 25.7063 21.4219 25.73 20.8481 26.0363C18.4119 27.335 15.5044 27.8625 12.4344 27.245C7.43313 26.2388 3.47813 22.1288 2.66188 17.0938C1.27938 8.56005 8.54688 1.2913 17.0806 2.6713C22.1169 3.4863 26.2281 7.44255 27.2344 12.4425C27.8519 15.5113 27.3269 18.4175 26.0281 20.8538ZM7.75811 14.9911C7.75811 15.9218 8.5187 16.6824 9.44943 16.6824C10.3802 16.6824 11.1407 15.9218 11.1407 14.9911C11.1407 14.0616 10.3802 13.301 9.44943 13.301C8.5187 13.301 7.75811 14.0616 7.75811 14.9911ZM15.0502 16.6824C14.1207 16.6824 13.3588 15.9218 13.3588 14.9911C13.3588 14.0616 14.1207 13.301 15.0502 13.301C15.9809 13.301 16.7415 14.0616 16.7415 14.9911C16.7415 15.9218 15.9809 16.6824 15.0502 16.6824ZM18.9601 14.9911C18.9601 15.9218 19.7207 16.6824 20.6514 16.6824C21.5809 16.6824 22.3427 15.9218 22.3427 14.9911C22.3427 14.0616 21.5809 13.301 20.6514 13.301C19.7207 13.301 18.9601 14.0616 18.9601 14.9911Z" fill="currentcolor"></path></symbol><symbol id="chat-progress" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M26.758 23.8145L25.9561 21.4102C25.8823 21.154 25.9139 21.0896 26.3399 20.2244C26.3611 20.1813 26.3833 20.1363 26.4065 20.0891C26.768 19.2948 27.0382 18.4579 27.2234 17.6035C27.5974 15.8921 27.5824 14.1057 27.2371 12.4069C26.5366 8.95422 24.2886 5.9081 21.2637 4.15924C19.7563 3.28356 18.045 2.71061 16.3074 2.5705C14.5835 2.39412 12.8009 2.54173 11.1371 3.09216C7.80451 4.17675 4.99858 6.70622 3.57372 9.90371C2.8444 11.4937 2.48662 13.2513 2.50038 14.9927C2.51414 16.7215 2.82188 18.4904 3.55996 20.0854C4.98357 23.2916 7.79826 25.8061 11.1296 26.8919C12.8009 27.4286 14.566 27.6163 16.3061 27.4311C17.1743 27.336 18.0362 27.1571 18.8669 26.8807C19.2834 26.7481 19.6888 26.5854 20.0878 26.4078C20.2817 26.3255 20.5061 26.2108 20.6865 26.1185C20.86 26.0298 20.9928 25.9619 21.0185 25.9637C21.1737 25.9162 21.3025 25.9199 21.4101 25.955L22.5272 26.3277L23.8107 26.7556C23.9405 26.7959 24.0716 26.8412 24.2027 26.8865C24.4455 26.9704 24.6885 27.0543 24.9241 27.1071C25.2881 27.1697 25.5646 27.1246 25.8135 27.0546C26.354 26.9157 26.9144 26.359 27.0532 25.8174C27.1246 25.5672 27.1708 25.2932 27.1083 24.9292C27.057 24.6969 26.9745 24.4576 26.8919 24.2179C26.8455 24.0831 26.799 23.9483 26.758 23.8145ZM23.5755 20.273C23.3866 20.866 23.3666 21.5628 23.583 22.202L24.2736 24.2724L23.3191 23.9547L22.1982 23.5806C21.5577 23.3654 20.8622 23.3867 20.2692 23.5769C19.8457 23.7282 19.6205 23.8485 19.4306 23.95C19.308 24.0154 19.2002 24.073 19.0633 24.126C18.743 24.2674 18.419 24.3975 18.085 24.5038C17.4232 24.7253 16.7365 24.8666 16.0434 24.9429C14.6536 25.093 13.225 24.9379 11.9027 24.5126C9.25064 23.6507 6.97261 21.6191 5.84298 19.0633C5.25503 17.7961 5.01859 16.3975 5.00233 14.9927C4.98857 13.5928 5.27379 12.193 5.858 10.9233C6.99763 8.36877 9.24939 6.33969 11.909 5.47276C13.2362 5.03117 14.6586 4.91733 16.0534 5.05994C17.4558 5.16753 18.7956 5.62288 20.0078 6.32217C22.4296 7.72201 24.2348 10.1764 24.7852 12.9073C25.0654 14.2884 25.0742 15.7132 24.7765 17.078C24.6289 17.7598 24.4149 18.4278 24.1247 19.0646C24.0727 19.2036 24.0139 19.3132 23.9463 19.4392C23.8448 19.6285 23.7235 19.8547 23.5755 20.273ZM7.75785 14.991C7.75785 15.9218 8.51845 16.6824 9.44917 16.6824C10.3799 16.6824 11.1405 15.9218 11.1405 14.991C11.1405 14.0616 10.3799 13.301 9.44917 13.301C8.51845 13.301 7.75785 14.0616 7.75785 14.991ZM13.3586 14.991C13.3586 15.9218 14.1204 16.6824 15.0499 16.6824C15.9806 16.6824 16.7412 15.9218 16.7412 14.991C16.7412 14.0616 15.9806 13.301 15.0499 13.301C14.1204 13.301 13.3586 14.0616 13.3586 14.991ZM20.6511 16.6824C19.7204 16.6824 18.9598 15.9218 18.9598 14.991C18.9598 14.0616 19.7204 13.301 20.6511 13.301C21.5806 13.301 22.3425 14.0616 22.3425 14.991C22.3425 15.9218 21.5806 16.6824 20.6511 16.6824Z" fill="currentcolor"></path></symbol><symbol id="chat-question-filled" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M26.0276 20.8538C25.7201 21.43 25.6964 22.1175 25.9039 22.7375L26.7014 25.1313C27.0276 26.1075 26.0989 27.0375 25.1214 26.7125C24.5483 26.5212 23.9457 26.3205 23.4071 26.141C23.161 26.059 22.9282 25.9815 22.7176 25.9113C22.1014 25.7063 21.4214 25.73 20.8476 26.0363C18.4114 27.335 15.5039 27.8625 12.4339 27.245C7.43264 26.2388 3.47764 22.1288 2.66139 17.0938C1.27889 8.56005 8.54639 1.2913 17.0801 2.6713C22.1164 3.4863 26.2276 7.44255 27.2339 12.4425C27.8514 15.5113 27.3264 18.4175 26.0276 20.8538ZM16.0382 18.1763H13.6621V17.2909C13.6621 15.8465 14.4437 14.4922 15.7518 13.6668C16.8361 12.984 17.4238 12.4925 17.4238 11.8572C17.4238 10.5904 16.1733 9.90635 14.9977 9.90635C13.7047 9.90635 12.5717 10.818 12.5717 11.8572H10.1956C10.1956 9.51243 12.3941 7.53029 14.9977 7.53029C17.6902 7.53029 19.7999 9.43114 19.7999 11.8572C19.7999 13.9244 18.0591 15.0224 17.0186 15.6764C16.7235 15.8628 16.0382 16.393 16.0382 17.2909V18.1763ZM16.4809 21.161C16.4809 22.0201 15.7856 22.7154 14.9265 22.7154C14.0686 22.7154 13.372 22.0201 13.372 21.161C13.372 20.3019 14.0686 19.6066 14.9265 19.6066C15.7856 19.6066 16.4809 20.3019 16.4809 21.161Z" fill="currentcolor"></path></symbol><symbol id="chat-question" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M25.9583 21.4119L26.99 24.5058C27.2864 25.4287 27.1226 25.9326 26.6373 26.5367C26.3897 26.8068 26.0496 26.9944 25.7557 27.0707C25.4756 27.1457 25.1067 27.1769 24.6715 27.0406L22.0015 26.1515L21.4838 25.9789C21.3656 25.9395 21.3529 25.9381 21.3138 25.9338C21.3032 25.9327 21.2907 25.9313 21.2737 25.9289C21.1599 25.9226 21.0148 25.9501 20.871 26.0264C19.4666 26.7793 17.8697 27.2757 16.2602 27.4358C13.0388 27.7772 9.68352 26.7855 7.17365 24.7409C4.65127 22.7275 2.90549 19.6874 2.59536 16.4459C2.17767 13.2395 3.15185 9.87797 5.13149 7.32058C7.13488 4.78945 10.12 2.98489 13.3577 2.61598C16.5541 2.16953 19.9494 3.01866 22.5243 5.00204C25.1242 6.9304 26.9125 9.93675 27.3664 13.1519C27.599 14.7464 27.5302 16.3996 27.1413 17.9741C26.945 18.7619 26.6724 19.5298 26.3297 20.2639C26.2776 20.3826 26.2182 20.4983 26.1589 20.6138C26.1258 20.6784 26.0927 20.7429 26.0608 20.8079C25.9947 20.932 25.9845 20.9646 25.9625 21.0356L25.957 21.053C25.9195 21.1943 25.9258 21.3106 25.9583 21.4119ZM23.586 22.2022C23.3859 21.6107 23.3871 20.9679 23.541 20.4052C23.6097 20.1363 23.7461 19.8274 23.8486 19.6398C23.8742 19.5874 23.9008 19.5357 23.9275 19.4841L23.9275 19.484C23.9752 19.3917 24.0228 19.2996 24.0637 19.2034C24.3388 18.6156 24.5564 18.0028 24.7127 17.3751C25.0229 16.1183 25.0791 14.8014 24.8916 13.5108C24.5264 10.9447 23.1083 8.55113 21.0173 6.99919C18.9577 5.41098 16.2627 4.73943 13.6841 5.09584C11.0954 5.38221 8.71559 6.83661 7.10487 8.85752C5.52792 10.9122 4.74006 13.5721 5.08022 16.1658C5.32157 18.7482 6.71219 21.1668 8.73935 22.7912C10.7603 24.4332 13.4164 25.2173 16.0063 24.9485C17.3019 24.8146 18.5425 24.4345 19.7118 23.8104C20.212 23.5478 20.801 23.3978 21.4175 23.4328C21.7014 23.4415 22.0803 23.5341 22.2741 23.6054L22.7931 23.7792L24.275 24.2732L23.586 22.2022ZM16.4808 21.1609C16.4808 22.02 15.7855 22.7153 14.9264 22.7153C14.0685 22.7153 13.3719 22.02 13.3719 21.1609C13.3719 20.3018 14.0685 19.6064 14.9264 19.6064C15.7855 19.6064 16.4808 20.3018 16.4808 21.1609ZM13.6621 18.1762H16.0381V17.2908C16.0381 16.3929 16.7234 15.8626 17.0186 15.6763C18.059 15.0223 19.7998 13.9243 19.7998 11.8571C19.7998 9.43103 17.6901 7.53018 14.9976 7.53018C12.394 7.53018 10.1955 9.51231 10.1955 11.8571H12.5716C12.5716 10.8179 13.7046 9.90624 14.9976 9.90624C16.1732 9.90624 17.4237 10.5903 17.4237 11.8571C17.4237 12.4924 16.836 12.9839 15.7517 13.6667C14.4437 14.492 13.6621 15.8464 13.6621 17.2908V18.1762Z" fill="currentcolor"></path></symbol><symbol id="comment-filled" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M8.75 3.75C5.98858 3.75 3.75 5.98858 3.75 8.75V26.1996C3.75 27.7718 5.56862 28.6459 6.7963 27.6637L11.0037 24.2978C11.447 23.9432 11.9978 23.75 12.5654 23.75H21.25C24.0114 23.75 26.25 21.5114 26.25 18.75V8.75C26.25 5.98858 24.0114 3.75 21.25 3.75H8.75ZM8.75 11.25C8.75 10.5596 9.30964 10 10 10H20C20.6904 10 21.25 10.5596 21.25 11.25C21.25 11.9404 20.6904 12.5 20 12.5H10C9.30964 12.5 8.75 11.9404 8.75 11.25ZM8.75 16.25C8.75 15.5596 9.30964 15 10 15H20C20.6904 15 21.25 15.5596 21.25 16.25C21.25 16.9404 20.6904 17.5 20 17.5H10C9.30964 17.5 8.75 16.9404 8.75 16.25Z" fill="currentcolor"></path></symbol><symbol id="comment" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M3.75 8.75C3.75 5.98858 5.98858 3.75 8.75 3.75H21.25C24.0114 3.75 26.25 5.98858 26.25 8.75V18.75C26.25 21.5114 24.0114 23.75 21.25 23.75H12.5654C11.9978 23.75 11.447 23.9432 11.0037 24.2978L6.7963 27.6637C5.56862 28.6459 3.75 27.7718 3.75 26.1996V8.75ZM8.75 6.25C7.36929 6.25 6.25 7.36929 6.25 8.75V24.8992L9.44195 22.3457C10.3285 21.6364 11.4301 21.25 12.5654 21.25H21.25C22.6307 21.25 23.75 20.1307 23.75 18.75V8.75C23.75 7.36929 22.6307 6.25 21.25 6.25H8.75ZM10 11.25C10 10.5596 10.5596 10 11.25 10H18.75C19.4404 10 20 10.5596 20 11.25C20 11.9404 19.4404 12.5 18.75 12.5H11.25C10.5596 12.5 10 11.9404 10 11.25ZM11.25 15C10.5596 15 10 15.5596 10 16.25C10 16.9404 10.5596 17.5 11.25 17.5H18.75C19.4404 17.5 20 16.9404 20 16.25C20 15.5596 19.4404 15 18.75 15H11.25Z" fill="currentcolor"></path></symbol><symbol id="communication" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M12.2264 21.2029C11.8014 20.4558 11.5011 19.6285 11.3537 18.7493C11.2855 18.343 11.2501 17.9256 11.2501 17.5C11.2501 13.3924 14.5521 10.0561 18.6465 10.0007C18.681 10.0002 18.7155 10 18.7501 10C19.6138 10 20.4435 10.146 21.2157 10.4147C24.1466 11.4345 26.2501 14.2216 26.2501 17.5C26.2501 19.0701 25.7676 20.5275 24.9429 21.732L26.2501 25L22.9821 23.6928C21.7775 24.5175 20.3201 25 18.7501 25C15.9546 25 13.5164 23.4706 12.2264 21.2029ZM8.75007 17.5C8.75007 12.3066 12.7091 8.03782 17.7737 7.54706C16.4837 5.27938 14.0455 3.75 11.2501 3.75C7.10794 3.75 3.75007 7.10786 3.75007 11.25C3.75007 12.8201 4.23252 14.2775 5.05727 15.482L3.75007 18.75L7.01806 17.4428C7.55995 17.8138 8.153 18.1156 8.78447 18.3353C8.76169 18.0599 8.75007 17.7813 8.75007 17.5ZM11.2501 1.25C15.511 1.25 19.1494 3.91488 20.5897 7.66886C25.2339 8.53246 28.7501 12.6056 28.7501 17.5C28.7501 19.089 28.3779 20.5955 27.7158 21.9328L28.5713 24.0715C28.9427 25.0001 28.725 26.0606 28.0178 26.7678C27.3107 27.4749 26.2501 27.6926 25.3216 27.3212L23.1828 26.4657C21.8456 27.1278 20.3391 27.5 18.7501 27.5C14.489 27.5 10.8504 24.8349 9.41024 21.0807C8.49682 20.9105 7.62613 20.6161 6.81732 20.2157L4.67855 21.0712C3.75001 21.4426 2.68946 21.2249 1.98231 20.5178C1.27515 19.8106 1.05746 18.7501 1.42888 17.8215L2.28439 15.6827C1.6223 14.3455 1.25007 12.839 1.25007 11.25C1.25007 5.72715 5.72723 1.25 11.2501 1.25ZM16.2501 17.5C16.2501 18.1904 15.6904 18.75 15.0001 18.75C14.3097 18.75 13.7501 18.1904 13.7501 17.5C13.7501 16.8096 14.3097 16.25 15.0001 16.25C15.6904 16.25 16.2501 16.8096 16.2501 17.5ZM18.7501 18.75C19.4404 18.75 20.0001 18.1904 20.0001 17.5C20.0001 16.8096 19.4404 16.25 18.7501 16.25C18.0597 16.25 17.5001 16.8096 17.5001 17.5C17.5001 18.1904 18.0597 18.75 18.7501 18.75ZM22.5001 18.75C23.1904 18.75 23.7501 18.1904 23.7501 17.5C23.7501 16.8096 23.1904 16.25 22.5001 16.25C21.8097 16.25 21.2501 16.8096 21.2501 17.5C21.2501 18.1904 21.8097 18.75 22.5001 18.75Z" fill="currentcolor"></path></symbol><symbol id="headset" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M15 2.5C20.5137 2.5 25 6.98625 25 12.5V21.25C25 21.94 24.44 22.5 23.75 22.5H20.625C19.5912 22.5 18.75 21.6588 18.75 20.625V14.375C18.75 13.3412 19.5912 12.5 20.625 12.5H22.5C22.5 8.36375 19.1363 5 15 5C10.8637 5 7.5 8.36375 7.5 12.5H9.375C10.4088 12.5 11.25 13.3412 11.25 14.375V20.625C11.25 21.6588 10.4088 22.5 9.375 22.5H7.5V23.75C7.5 24.4387 8.06125 25 8.75 25H13.75C14.4404 25 15 25.5596 15 26.25C15 26.9404 14.4404 27.5 13.75 27.5H8.75C6.6825 27.5 5 25.8175 5 23.75V12.5C5 6.98625 9.48625 2.5 15 2.5Z" fill="currentcolor"></path></symbol><symbol id="help-filled" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M15.0005 2.50024C21.9038 2.50024 27.5005 8.09655 27.5005 15.0002C27.5005 21.9039 21.9038 27.5002 15.0005 27.5002C8.09638 27.5002 2.50049 21.9044 2.50049 15.0002C2.50049 8.09614 8.09638 2.50024 15.0005 2.50024ZM16.0387 18.1764H13.6626V17.291C13.6626 15.8466 14.4442 14.4922 15.7523 13.6669C16.8365 12.984 17.4243 12.4926 17.4243 11.8573C17.4243 10.5905 16.1737 9.90642 14.9982 9.90642C13.7051 9.90642 12.5721 10.8181 12.5721 11.8573H10.1961C10.1961 9.5125 12.3946 7.53036 14.9982 7.53036C17.6907 7.53036 19.8004 9.43121 19.8004 11.8573C19.8004 13.9245 18.0596 15.0225 17.0191 15.6765C16.724 15.8628 16.0387 16.3931 16.0387 17.291V18.1764ZM14.9269 22.7155C14.0691 22.7155 13.3725 22.0202 13.3725 21.1611C13.3725 20.3019 14.0691 19.6066 14.9269 19.6066C15.7861 19.6066 16.4814 20.3019 16.4814 21.1611C16.4814 22.0202 15.7861 22.7155 14.9269 22.7155Z" fill="currentcolor"></path></symbol><symbol id="send-forward-filled" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M26.1482 6.26333L3.64868 6.26305C3.14742 6.26233 2.69385 6.56173 2.49869 7.0237C2.30182 7.48522 2.40048 8.0186 2.74753 8.3797L9.68474 15.5953L22.1471 9.31817L22.5858 10.0781L10.9315 17.7622L13.6518 27.4139C13.7884 27.898 14.2011 28.2529 14.6999 28.3143C14.9759 28.3498 15.2489 28.2903 15.4795 28.1571C15.6657 28.0496 15.8255 27.8939 15.9376 27.7007L27.2307 8.13828C27.455 7.75184 27.4545 7.27585 27.2307 6.88831C27.0076 6.50184 26.5956 6.26336 26.1482 6.26333" fill="currentcolor"></path></symbol><symbol id="send-forward" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M12.0263 14.3042L6.68602 8.75008H21.6031L12.0263 14.3042ZM26.2359 6.25007H3.75005C2.64821 6.25007 2.08531 7.57218 2.84899 8.36643L10.6869 16.5181L13.7531 27.4003C14.0531 28.4648 15.4859 28.6441 16.0388 27.6863L27.3255 8.13739C27.3338 8.12322 27.3419 8.10889 27.3497 8.09442C27.7937 7.27616 27.2145 6.27392 26.2834 6.25048C26.2676 6.25004 26.2517 6.2499 26.2359 6.25007ZM22.8259 10.931L13.2713 16.4722L15.3557 23.8696L22.8259 10.931Z" fill="currentcolor"></path></symbol><symbol id="sms-filled" viewBox="0 0 30 30"><path mask="url(#ch-icons-mask)" fill-rule="evenodd" d="M26.875 15C26.875 20.5228 21.5584 25 15 25C14.1389 25 13.2992 24.9228 12.4901 24.7762C10.5908 26.4003 8.37401 27.1166 7.07099 27.4174C6.6468 27.5154 6.35471 27.0422 6.58178 26.6707C7.08684 25.8445 7.77266 24.5635 8.15573 23.173C5.11232 21.3623 3.125 18.3766 3.125 15C3.125 9.47715 8.44162 5 15 5C21.5584 5 26.875 9.47715 26.875 15ZM7.5 14.9993C7.5 16.0315 8.34489 16.875 9.37569 16.875C10.4079 16.875 11.2514 16.0315 11.2514 14.9993C11.2514 13.9685 10.4079 13.125 9.37569 13.125C8.34489 13.125 7.5 13.9685 7.5 14.9993ZM13.125 14.9993C13.125 16.0315 13.9699 16.875 15.0007 16.875C16.0329 16.875 16.8764 16.0315 16.8764 14.9993C16.8764 13.9685 16.0329 13.125 15.0007 13.125C13.9699 13.125 13.125 13.9685 13.125 14.9993ZM20.6257 16.875C19.5949 16.875 18.75 16.0315 18.75 14.9993C18.75 13.9685 19.5949 13.125 20.6257 13.125C21.6579 13.125 22.5014 13.9685 22.5014 14.9993C22.5014 16.0315 21.6579 16.875 20.6257 16.875Z" fill="currentcolor"></path></symbol><symbol id="sms" viewBox="0 0 30 30"><g mask="url(#ch-icons-mask)"><path d="M7.5 14.9993C7.5 16.0315 8.34489 16.875 9.37569 16.875C10.4079 16.875 11.2514 16.0315 11.2514 14.9993C11.2514 13.9685 10.4079 13.125 9.37569 13.125C8.34489 13.125 7.5 13.9685 7.5 14.9993Z" fill="currentColor"></path><path d="M13.125 14.9993C13.125 16.0315 13.9699 16.875 15.0007 16.875C16.0329 16.875 16.8764 16.0315 16.8764 14.9993C16.8764 13.9685 16.0329 13.125 15.0007 13.125C13.9699 13.125 13.125 13.9685 13.125 14.9993Z" fill="currentColor"></path><path d="M20.6257 16.875C19.5949 16.875 18.75 16.0315 18.75 14.9993C18.75 13.9685 19.5949 13.125 20.6257 13.125C21.6579 13.125 22.5014 13.9685 22.5014 14.9993C22.5014 16.0315 21.6579 16.875 20.6257 16.875Z" fill="currentColor"></path><path fill-rule="evenodd" d="M15 3.75C7.96117 3.75 1.875 8.59411 1.875 15C1.875 18.5603 3.78885 21.6689 6.66906 23.6979C6.36904 24.49 5.98744 25.221 5.65041 25.7935C5.26104 26.4549 5.31755 27.2305 5.69195 27.8008C6.08079 28.3931 6.82826 28.7712 7.65541 28.562C8.97104 28.2292 10.9899 27.531 12.8437 26.0991C13.546 26.1984 14.2664 26.25 15 26.25C22.0388 26.25 28.125 21.4059 28.125 15C28.125 8.59411 22.0388 3.75 15 3.75ZM4.375 15C4.375 10.3602 8.92207 6.25 15 6.25C21.0779 6.25 25.625 10.3602 25.625 15C25.625 19.6398 21.0779 23.75 15 23.75C14.2136 23.75 13.4485 23.6795 12.713 23.5462L12.1289 23.4404L11.6777 23.8262C10.669 24.6887 9.54739 25.2699 8.54952 25.6573C8.85534 25.0093 9.1482 24.2768 9.36084 23.505L9.61398 22.586L8.79485 22.0987C6.05428 20.4682 4.375 17.8541 4.375 15Z" fill="currentColor"></path></g></symbol></svg><div data-ch-testid="launcher" hidden="" class="Launcherstyled__LauncherButtonWrapper-ch-front__sc-1kx6op4-0 hKxqSP"><button type="button"><div class="ChatButtonContainer__Container-ch-front__sc-qgvnh9-0 cgHhTF"><span class="a11y-hidden">포인핸드몰 상담 버튼</span><div class="SenderButtonView__Wrapper-ch-front__sc-1aik3pi-0 eFJnEc"><div src="https://cf.channel.io/avatar/emoji/sun_with_face.cc9efe.png" class="SenderButtonView__SenderAvatarBg-ch-front__sc-1aik3pi-1 dxTxFT"></div></div><div class="IconButtonView__Background-ch-front__sc-vtu014-0 fDmWdC"><svg width="36" height="36" color="#ffffff"><use href="#channel-filled"></use></svg></div><div data-ch-testid="minimize-button" class="MinimizeButtonView__Wrapper-ch-front__sc-1idijj-0 giSWOn"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none" viewBox="0 0 24 24" foundation="[object Object]" class="Iconstyled__Icon-sc-1iqwu2g-0 pJGcx" data-testid="bezier-react-icon" color="txt-black-darker" margintop="0" marginright="0" marginbottom="0" marginleft="0" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M16.95 8.464a1 1 0 1 0-1.414-1.414L12 10.586 8.465 7.051A1 1 0 0 0 7.05 8.464L10.586 12 7.05 15.535a1 1 0 1 0 1.414 1.414L12 13.414l3.536 3.536a1 1 0 0 0 1.414-1.415L13.414 12z" clip-rule="evenodd"></path></svg></div></div></button></div></div></template></div></div>      <div id="ch-plugin-script" style="display:none;" class="ch-messenger-hidden">        <iframe id="ch-plugin-script-iframe" title="Channel chat" style="position:relative!important;height:100%!important;width:100%!important;border:none!important;" src="./pawinhand-og_files/saved_resource(1).html"></iframe>      </div>    <style data-styled="active" data-styled-version="5.3.9"></style></div></body><grammarly-desktop-integration data-grammarly-shadow-root="true"><template shadowrootmode="open"><style>
+      div.grammarly-desktop-integration {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select:none;
+        user-select:none;
+      }
+
+      div.grammarly-desktop-integration:before {
+        content: attr(data-content);
+      }
+    </style><div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration" data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div></template></grammarly-desktop-integration></html>
